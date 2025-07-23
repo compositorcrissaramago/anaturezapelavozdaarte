@@ -231,14 +231,20 @@
 
       /* Menu hambúrguer para telas muito pequenas */
       .menu-toggle {
-      display: none;
-      background: none;
-      border: none;
-      font-size: 1.2rem; /* Reduz o tamanho do símbolo e da caixa */
-      padding: 0.2rem 0.4rem; /* Adiciona um preenchimento menor para a caixa */
-      color: #3d2e20;
-     cursor: pointer;
+       display: none;
+       background: none;
+       border: none;
+       font-size: 1.2rem; /* Reduzido de 1.5rem */
+       padding: 0.2rem 0.4rem; /* Adicionado */
+       color: #3d2e20;
+       cursor: pointer;
+       border-radius: 4px; /* Opcional */
        }
+
+        /* Opcional: hover effect */
+      .menu-toggle:hover {
+       background-color: rgba(61, 46, 32, 0.1);
+      }
 
 
       @media (max-width: 600px) {
