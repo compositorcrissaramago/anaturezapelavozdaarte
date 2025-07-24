@@ -149,136 +149,89 @@
     }
 
     /* Responsividade para mobile */
-    @media (max-width: 768px) {
-      body {
-        padding-top: 60px; /* Mais espaço para menu em mobile */
-        background-attachment: scroll; /* Melhor performance em mobile */
-      }
+/* Menu Mobile - Versão Super Compacta */
+   @media (max-width: 768px) {
+    body {
+      padding-top: 50px !important; /* Altura total do menu mobile */
+   }
 
-      nav .container-fluid {
-      flex-direction: row; /* Mantém em linha em vez de coluna */
+    nav {
+     height: 50px; /* Altura fixa reduzida */
+     padding: 0.1rem 0.5rem !important;
+   }
+
+    nav .container-fluid {
+      flex-direction: row; /* Mantém logo e menu na mesma linha */
       align-items: center;
+      justify-content: space-between;
       gap: 0.5rem;
-      padding: 0.5rem 1rem; /* Padding mais compacto */
-      }
-
-      nav ul {
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 0.3rem;
-      }
-
-      nav a {
-        padding: 0.3rem 0.6rem; /* Padding mais compacto */
-        font-size: 1rem;
-      }
-
-      .logo-link {
-        font-size: 1.5rem;
-        margin-bottom: 0.5rem;
-      }
-
-      main {
-        padding: 1rem;
-      }
-
-      .content-overlay {
-        margin: 1rem;
-        padding: 1.5rem;
-      }
-
-      h2 {
-        font-size: 2rem;
-      }
-
-      h3 {
-        font-size: 1.5rem;
-      }
-
-      p {
-        font-size: 0.95rem;
-      }
+      padding: 0 !important;
+      height: 100%;
     }
 
-    @media (max-width: 480px) {
-     body {
-      padding-top: 50px; /* Reduzido de 140px */
+    .logo-link {
+      font-size: 1rem !important;
+      padding: 0.2rem 0 !important;
+      white-space: nowrap; /* Evita quebra de linha */
+    }
+
+    nav ul {
+      gap: 0.3rem !important;
+      flex-wrap: nowrap; /* Itens sempre em linha */
+      overflow-x: auto; /* Permite scroll horizontal se necessário */
+      padding-bottom: 2px; /* Espaço para scroll */
+    }
+
+    nav li {
+      flex-shrink: 0; /* Evita que os itens encolham */
+    }
+
+    nav a {
+      font-size: 0.75rem !important;
+      padding: 0.2rem 0.4rem !important;
+    }
  }
 
-      nav .container-fluid {
-       padding: 0.3rem 0.8rem; /* Padding ainda mais compacto */
+/* Ajustes para telas muito pequenas (ex: iPhone SE) */
+   @media (max-width: 480px) {
+    body {
+      padding-top: 45px !important;
     }
 
-      .logo-link {
-       font-size: 1.1rem;
-    }
- 
-      nav a {
-       padding: 0.2rem 0.5rem;
-       font-size: 0.85rem;
-
-      nav ul:last-child {
-        flex-direction: row;
-        flex-wrap: wrap;
-        justify-content: center;
-      }
-
-      .content-overlay {
-        margin: 0.5rem;
-        padding: 1rem;
-      }
-
-      h2 {
-        font-size: 1.8rem;
-      }
-
-      h3 {
-        font-size: 1.3rem;
-      }
+    nav {
+      height: 45px;
     }
 
-    /* Menu hambúrguer para telas muito pequenas .menu-toggle {
-       display: none;
-       background: none;
-       border: none;
-       font-size: 1.0rem; # Reduzido de 1.5rem 
-       padding: 0.1rem 0.4rem; # Adicionado 
-       color: #3d2e20;
-       cursor: pointer;
-       border-radius: 4px; # Opcional 
-       }
+    .logo-link {
+      font-size: 0.9rem !important;
+    }
 
-    @media (max-width: 600px) {
-      .menu-toggle {
-        display: block;
-      }
- */
+    nav a {
+      font-size: 0.7rem !important;
+      padding: 0.15rem 0.3rem !important;
+    }
+
+    nav ul {
+      gap: 0.2rem !important;
+    }
+ }
+
+/* Solução para telas extremamente estreitas */
+   @media (max-width: 360px) {
+    .logo-link {
+      font-size: 0.8rem !important;
+    }
+
+    nav a {
+      font-size: 0.65rem !important;
+      padding: 0.1rem 0.25rem !important;
+    }
+
+    nav .container-fluid {
+      gap: 0.3rem;
+    }
+  }
     
-      .nav-menu {
-        display: none;
-        position: absolute;
-        top: 100%;
-        left: 0;
-        right: 0;
-        background-color: rgba(244, 241, 234, 0.75);
-        backdrop-filter: blur(10px);
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-      }
-
-
-      
-
-      .nav-menu ul {
-        flex-direction: column;
-        padding: 0.5rem;
-        gap: 0.2rem;
-      }
-
-      nav .container-fluid {
-        justify-content: space-between;
-        align-items: center;
-      }
-    }
   </style>
 </head>
 
@@ -326,28 +279,6 @@
     <p>&copy; 2025 Cristiano Saramago. Todos os direitos reservados.</p>
   </footer>
 
-  <script>
-    function toggleMenu() {
-      const navMenu = document.getElementById('navMenu');
-      navMenu.classList.toggle('active');
-    }
-
-    // Fechar menu ao clicar em um link
-    document.querySelectorAll('.nav-menu a').forEach(link => {
-      link.addEventListener('click', () => {
-        document.getElementById('navMenu').classList.remove('active');
-      });
-    });
-
-    // Fechar menu ao clicar fora
-    document.addEventListener('click', (e) => {
-      const nav = document.querySelector('nav');
-      const navMenu = document.getElementById('navMenu');
-      if (!nav.contains(e.target)) {
-        navMenu.classList.remove('active');
-      }
-    });
-  </script>
 </body>
 
 </html>
