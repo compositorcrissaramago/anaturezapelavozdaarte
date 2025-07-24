@@ -213,33 +213,35 @@
           margin: 1rem;
         }
       }
-/*tela estreita mobile*/
+/* Ajustes para telas muito pequenas */
   @media (max-width: 480px) {
     body {
-      padding-top: 140px;
+      padding-top: 100px !important;
     }
-  
+
+    nav {
+      min-height: 40px;
+      padding: 0.1rem 0.1rem !important;
+    }
+
+    .logo-link {
+      font-size: 1.5rem !important;
+    }
+
+    nav a {
+      font-size: 0.85rem !important;
+      padding: 0.1rem 0.1rem !important;
+    }
+
     nav ul {
-      flex-direction: column;
-      width: 100%;
+      gap: 0.8rem !important;
+
+    }
+    .content-overlay {
+       margin-top: 1.5rem; /* Espaço extra após o menu */
     }
 
-    nav ul:last-child {
-      flex-direction: row;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-
-    main {
-      margin-top: 2rem;  /* Corrigido e aumentado para melhor espaçamento */
-      padding-top: 1rem; /* Corrigido e ajustado o valor */
-      min-height: calc(100vh - 140px); /* Alterado para min-height */
-    }
-
-    h2 {
-      font-size: 1.8rem;
-    }
-
+  
     .grid iframe {
       height: 200px;
     }
