@@ -127,8 +127,16 @@
          aspect-ratio: 16/9; /* Proporção YouTube */
          border-radius: 8px;
          box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-}
+     }
+      /* Seleciona qualquer parágrafo que vem imediatamente antes de um .video-container */
+      p + .video-container {
+         margin-top: 1rem; /* Espaço entre texto e vídeo */
+     }
 
+/* Centraliza o parágrafo anterior ao vídeo */
+     .video-container:has(iframe) {
+       text-align: center;
+     }
       main::-webkit-scrollbar {
         width: 8px;
       }
