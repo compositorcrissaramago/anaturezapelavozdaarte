@@ -201,14 +201,21 @@
     }
 
     @media (max-width: 480px) {
-      body {
-        padding-top: 140px;
-      }
+     body {
+      padding-top: 50px; /* Reduzido de 140px */
+ }
 
-      nav ul {
-        flex-direction: column;
-        width: 100%;
-      }
+      nav .container-fluid {
+       padding: 0.3rem 0.8rem; /* Padding ainda mais compacto */
+    }
+
+      .logo-link {
+       font-size: 1.1rem;
+    }
+ 
+      nav a {
+       padding: 0.2rem 0.5rem;
+       font-size: 0.85rem;
 
       nav ul:last-child {
         flex-direction: row;
