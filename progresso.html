@@ -114,6 +114,19 @@
         display: flex;
         flex-direction: column;
         justify-content: space-between;   /* Distribui o espaço verticalmente */
+     }
+      .video-container {
+         width: 100%;
+         max-width: 800px; /* Largura máxima opcional */
+         margin: 1.5rem auto; /* Espaço vertical e centralização */
+     }
+
+      .video-container iframe {
+         width: 100%;
+         height: auto;
+         aspect-ratio: 16/9; /* Proporção YouTube */
+         border-radius: 8px;
+         box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
       main::-webkit-scrollbar {
