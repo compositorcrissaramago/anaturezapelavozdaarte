@@ -97,16 +97,24 @@
       }
 
       /* Página Progresso mantém layout original (exceção) */
-      main { 
+      main {
         background-color: rgba(244, 241, 234, 0.75);
         border-radius: 12px;
-        padding: 2rem;
-        margin: 2rem;
+        padding: 4rem;                    /* Padding interno generoso */
+        margin: 2rem;                     /* Margem externa */
         backdrop-filter: blur(5px);
         box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-        max-height: calc(100vh - 140px);
-        overflow-y: auto;
-      }
+  
+  /* --- Controle de altura --- */
+        min-height: 80vh;                 /* Altura mínima de 80% da viewport (ajuste conforme necessidade) */
+        max-height: none;                 /* Remove o limite máximo anterior */
+        overflow-y: auto;                 /* Mantém scroll se o conteúdo for muito longo */
+  
+  /* Garante que o conteúdo não fique colado nas bordas */
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;   /* Distribui o espaço verticalmente */
+}
 
       main::-webkit-scrollbar {
         width: 8px;
