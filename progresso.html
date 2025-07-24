@@ -106,7 +106,7 @@
         box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
   
   /* --- Controle de altura --- */
-        min-height: 80vh;                 /* Altura mínima de 80% da viewport (ajuste conforme necessidade) */
+        min-height: 90vh;                 /* Altura mínima de 90% da viewport (ajuste conforme necessidade) */
         max-height: none;                 /* Remove o limite máximo anterior */
         overflow-y: auto;                 /* Mantém scroll se o conteúdo for muito longo */
   
@@ -116,9 +116,9 @@
         justify-content: space-between;   /* Distribui o espaço verticalmente */
      }
       .video-container {
-         width: 80%;
+         width: 90%;
          max-width: 800px; /* Largura máxima opcional */
-         margin: 3rem auto; /* Espaço vertical e centralização */
+         margin: 2rem auto; /* Espaço vertical e centralização */
      }
 
       .video-container iframe {
@@ -128,18 +128,12 @@
          border-radius: 8px;
          box-shadow: 0 4px 12px rgba(0,0,0,0.1);
      }
-      /* Seleciona qualquer parágrafo que vem imediatamente antes de um .video-container */
-      p + .video-container {
-         margin-top: 1rem; /* Espaço entre texto e vídeo */
+      
+      .video-caption {
+         text-align: center;
+         margin-bottom: 1rem; /* Espaço entre o texto e o vídeo */
+         font-style: bold; /* Opcional - para diferenciar */
      }
-
-/* Centraliza o parágrafo anterior ao vídeo */
-     .video-container:has(iframe) {
-       text-align: center;
-     }
-      main::-webkit-scrollbar {
-        width: 8px;
-      }
 
       main::-webkit-scrollbar-track {
         background: rgba(244, 241, 234, 0.3);
@@ -301,7 +295,7 @@
         <h2>Progresso dos Projetos</h2>
         <p>Hoje estou comemorando o nascimento do Pendobot, o primeiro protótipo de sonificador de dados do DataSonar Labs. Seu nome é em homenagem à cidade onde seu criador idealizou e realizou o desenvolvimento de seu embrião. Hoje Pendobot foi capaz de gerar sons musicais a partir dos dados de noite/dia (ele ainda é bebê), temperatura, velocidade do vento e umidade. Suas primeiras palavras geram sonoridades distintas para o dia e a noite de inverno, com variações ao longo do dia e da noite.❤️🎵🎛️🤖</p>
 
-        <p>No momento existe a versão otimizada 1.4    Jul25, este é um exemplo de obra! 
+        <p class="video-caption">No momento existe a versão otimizada 1.4 Jul25, este é um exemplo de obra! 
           Clima de Viagem: viaje com os ouvidos!</p>
         
         <div class="video-container">
@@ -311,7 +305,7 @@
         <div style="margin: 3rem 0;"></div>
         <div style="margin: 3rem 0;"></div>
 
-        <p>No momento existe a versão otimizada 1.4    Jul25, este é um exemplo de funcionamento
+        <p class="video-caption">No momento existe a versão otimizada 1.4    Jul25, este é um exemplo de funcionamento
         Como é o set-up?</p>
         
         <div class="video-container">
@@ -321,7 +315,7 @@
         <div style="margin: 3rem 0;"></div>
         <div style="margin: 3rem 0;"></div>
         
-        <p>No momento existe a versão otimizada 1.3 Jul25.</p>
+        <p class="video-caption">No momento existe a versão otimizada 1.3 Jul25.</p>
         
         <div class="video-container">
           <iframe src="https://www.youtube.com/embed/A1OEiROdx6k" title="Pendobot - Novo Vídeo" frameborder="0" allowfullscreen></iframe>
@@ -330,7 +324,7 @@
         <div style="margin: 3rem 0;"></div>
         <div style="margin: 3rem 0;"></div>
         
-        <p>No momento existe a versão otimizada 1.2 Jul25.</p>
+        <p class="video-caption">No momento existe a versão otimizada 1.2 Jul25.</p>
         <div class="video-container">
           <iframe src="https://www.youtube.com/embed/9In-w4I994g" title="Pendobot - Primeiro Protótipo" frameborder="0" allowfullscreen></iframe>
         </div>
