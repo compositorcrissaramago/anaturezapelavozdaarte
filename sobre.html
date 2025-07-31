@@ -163,13 +163,15 @@
       footer {
         background-color: rgba(244, 241, 234, 0.95);
         color: #3d2e20;
-        text-align: center;
+        text-align: center; /* Centraliza o texto */
         padding: 1rem;
         margin-top: 2rem;
         border-radius: 0;
         font-size: 0.8rem;
         backdrop-filter: blur(10px);
-      }
+        width: 100%; /* Garante que ocupe toda a largura */
+        box-sizing: border-box; /* Inclui padding na largura total */
+   }
 
       /* Responsividade para mobile */
       @media (max-width: 768px) {
