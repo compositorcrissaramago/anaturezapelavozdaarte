@@ -14,17 +14,166 @@
 
   <!-- Seu sketch -->
   <script>
-    function setup() {
-      createCanvas(windowWidth, windowHeight);
-      background(50, 100, 200);
-    }
+    //* muda de timbre sawtooth<->sine e pitch(cima e baixo)
+let img;
+let x, y, mx, my;
+let vol, timb;
+let osc1, osc2;
+let freq;
+let cor1, cor2, cor3, alfa;
+let n; // contador de notas
+let escn = ["Maior", "Menor H", "Menor M", "Mixolídio", "Dórico"];
+let escalas;
+let botaoAtivo = -1; // índice do botão ativo, -1 = nenhum
 
-    function draw() {
-      fill(255);
-      textSize(32);
-      textAlign(CENTER, CENTER);
-      text("Olá, p5.js está funcionando!", width/2, height/2);
-    }
+// Arrays de escalas musicais a partir de F1
+let escalaMaior = [174.61, 196.0, 220.0, 233.08, 261.63, 293.66, 329.63, 349.23, 392.0, 440.0, 466.16, 523.25, 587.33, 659.26, 698.46];
+let escalaMenorHarmonica = [174.61, 196.0, 207.65, 233.08, 261.63, 277.18, 329.63, 349.23, 392.0, 415.3, 466.16, 523.25, 554.36, 659.26, 698.46];
+let escalaMenorMelodica = [174.61, 196.0, 207.65, 233.08, 261.63, 293.66, 329.63, 349.23, 392.0, 415.3, 466.16, 523.25, 587.33, 659.26, 698.46];
+let escalaMixolidia = [174.61, 196.0, 220.0, 233.08, 261.63, 293.66, 311.13, 349.23, 392.0, 440.0, 466.16, 523.25, 587.33, 622.25, 698.46];
+let escalaDorica = [174.61, 196.0, 207.65, 233.08, 261.63, 293.66, 311.13, 349.23, 392.0, 415.3, 466.16, 523.25, 587.33, 622.25, 698.46];
+
+let escalasPorBotao = [escalaMaior, escalaMenorHarmonica, escalaMenorMelodica, escalaMixolidia, escalaDorica];
+
+let nBotoes = 5;
+let larguraBotao, alturaBotao;
+
+function preload() {
+  // Carregando imagem direto de uma URL (RAW do GitHub)
+  img = loadImage(
+    "https://raw.githubusercontent.com/compositorcrissaramago/anaturezapelavozdaarte/refs/heads/main/attached_assets/ChatGPTImage17dejul.de2025%2C12_38_09.png"
+  );
+}
+
+function setup() {
+  createCanvas(windowWidth, windowHeight);
+  
+  osc1 = new p5.Oscillator("sine");
+  osc1.amp(0);
+  osc2 = new p5.Oscillator("square");
+  osc2.amp(0);
+  freq = 349.23;
+  osc1.start();
+  osc2.start();
+  osc1.freq(freq);
+  osc2.freq(freq);
+  n = 7;
+
+  larguraBotao = width / nBotoes;
+  alturaBotao = height / 6;
+}
+
+function draw() {
+  background(0);
+  
+  // --- IMAGEM DE FUNDO PROPORCIONAL ---
+  let imgAspect = img.width / img.height;
+  let canvasAspect = width / height;
+
+  let drawWidth, drawHeight;
+
+  if (canvasAspect > imgAspect) {
+    drawHeight = height;
+    drawWidth = imgAspect * height;
+  } else {
+    drawWidth = width;
+    drawHeight = width / imgAspect;
+  }
+
+  let xi = (width - drawWidth) / 2;
+  let yi = (height - drawHeight) / 2;
+
+  image(img, xi, yi, drawWidth, drawHeight);
+
+  // --- INTERFACE E TEXTO ---
+  textFont('cursive');
+  noStroke();
+  fill("indianred");
+  textSize(60);
+  textAlign(LEFT);
+  text("SQUARE", width * 0.02, height / 2);
+
+  fill("cyan");
+  textAlign(RIGHT);
+  text("SINE", width - width * 0.05, height / 2);
+
+  fill("lightgreen");
+  textAlign(CENTER);
+  text("Volume", width / 2, height / 8);
+
+  
+  fill(255);
+  textSize(20);
+  text("1.Escolha um modo escalar", width / 2, height - height / 2.6);
+  fill(255);
+  textSize(20);
+  text("2.Click, segure e arraste pela tela", width / 2, height - height / 2.95);
+  fill(255);
+  textSize(20);
+  text("3.MouseScroll para notas da escala", width / 2, height - height / 3.4);
+
+  // --- MAPEAMENTO DE VALORES ---
+  vol = map(mouseY, height - alturaBotao, 0, 0, 1);
+  cor3 = map(mouseX, 0, width, 60, 255);
+  cor2 = map(freq, 200, 600, 80, 255);
+  cor1 = map(mouseX, width, 0, 60, 255);
+  alfa = map(mouseY, height, 0, 60, 255);
+
+  // --- SONS E CÍRCULO INTERATIVO ---
+  if (mouseIsPressed && mouseY < height - alturaBotao) {
+    osc1.freq(freq);
+    osc1.amp(map(mouseX, 0, width, 0, 1) * vol, 0.5);
+    osc2.freq(freq );
+    osc2.amp(map(mouseX, width, 0, 0, 0.1) * vol, 0.5);
+    fill(cor1, cor2, cor3, alfa);
+    circle(mouseX, mouseY, map(vol, 0, 1, 10, 200));
+  } else {
+    osc1.amp(0, 0.5);
+    osc2.amp(0, 0.5);
+  }
+
+  // --- BOTÕES ---
+  for (let i = 0; i < nBotoes; i++) {
+    let xBotao = i * larguraBotao;
+    let yBotao = height - alturaBotao;
+    fill(255 * (1 / (i + 1)), 130, 150 + i * 20);
+    rect(xBotao, yBotao, larguraBotao, alturaBotao);
+    fill(255);
+    textAlign(CENTER, CENTER);
+    textSize(16);
+    text(escn[i], xBotao + larguraBotao / 2, yBotao + alturaBotao / 2);
+  }
+
+  // --- INDICADOR DE BOTÃO ATIVO ---
+  if (botaoAtivo >= 0) {
+  let xBotao = botaoAtivo * larguraBotao;
+  let yBotao = height - alturaBotao;
+  fill(255, 255, 0, 100); // amarelo semi-transparente
+  noStroke();
+  rect(xBotao, yBotao, larguraBotao, alturaBotao); // cobre o botão inteiro
+}
+  
+}
+
+function mouseClicked() {
+  if (mouseY > height - alturaBotao) {
+    let indiceBotao = floor(mouseX / larguraBotao);
+    escalas = escalasPorBotao[indiceBotao];
+    n = 0;
+    freq = escalas[n];
+    botaoAtivo = indiceBotao; // marca o botão ativo
+    print(escn[indiceBotao]);
+  }
+}
+
+function mouseWheel(event) {
+  if (event.delta < 0 && n < escalas.length - 1) {
+    n++;
+  } else if (event.delta > 0 && n > 0) {
+    n--;
+  }
+  freq = escalas[n];
+}
   </script>
 </body>
 </html>
