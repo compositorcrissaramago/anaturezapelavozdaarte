@@ -292,7 +292,7 @@
 
     function draw() {
       background(0);
-      freq = 349.23
+      
       // Imagem proporcional
       let imgAspect = img.width / img.height;
       let canvasAspect = width / height;
@@ -329,6 +329,7 @@
 
       // Som interativo
       if(mouseIsPressed && mouseY < height - alturaBotao){
+    
         osc1.freq(freq); osc1.amp(map(mouseX, 0, width, 0, 1) * vol, 0.1);
         osc2.freq(freq); osc2.amp(map(mouseX, width, 0, 0, 0.05) * vol, 0.1);
         fill(cor1, cor2, cor3, alfa);
@@ -357,19 +358,25 @@
     }
 
     function mouseClicked(){
-      userStartAudio().then(()=>{
+      function mouseClicked(){
+       userStartAudio().then(()=>{
         if(!osc1.started) osc1.start();
         if(!osc2.started) osc2.start();
-      });
+  });
 
-      if(mouseY>height-alturaBotao){
-        let indiceBotao = floor(mouseX/larguraBotao);
-        escalas = escalasPorBotao[indiceBotao];
-        n = 0;
-        freq = escalas[n];
-        botaoAtivo = indiceBotao;
-        print(escn[indiceBotao]);
-      }
+        if(mouseY > height - alturaBotao){
+        let indiceBotao = floor(mouseX / larguraBotao);
+         escalas = escalasPorBotao[indiceBotao];
+         n = 7; // SEMPRE define n=7 quando qualquer botão for clicado
+         freq = escalas[n];
+         botaoAtivo = indiceBotao;
+         print(escn[indiceBotao]);
+  }
+  
+  // Atualiza os osciladores com a frequência atual
+  osc1.freq(freq);
+  osc2.freq(freq);
+}
     }
 
     function mouseWheel(event){
