@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Controle de Tom e Timbre - DataSonar Labs</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/addons/p5.sound.min.js"></script>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background: black;
+    }
+    
+    #gameContainer {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100vw;
+      height: 100vh;
+    }
+    
+    canvas {
+      display: block;
+    }
+    
+    .back-button {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      background-color: rgba(0, 0, 0, 0.5);
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 5px;
+      cursor: pointer;
+      z-index: 1000;
+    }
+    
+    .instructions {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: white;
+      background-color: rgba(0, 0, 0, 0.5);
+      padding: 10px 15px;
+      border-radius: 5px;
+      text-align: center;
+      font-family: Arial, sans-serif;
+    }
+  </style>
+</head>
+<body>
+  <button class="back-button" onclick="window.location.href='jogos.html'">← Voltar</button>
+  <div class="instructions">
+    Clique e arraste para controlar o som. Use a roda do mouse para mudar as notas.
+  </div>
+  <div id="gameContainer"></div>
+
+  <script>
+    let x, y, mx, my;
+    let vol, timb;
+    let osc1, osc2;
+    let freq;
+    let cor1, cor2, cor3, alfa;
+    let n; //contador de notas
+    let faMaior = [
+      // Oitava 3 (F3 → E4)
+      174.61,
+      196.0,
+      220.0,
+      233.08,
+      261.63,
+      293.66,
+      329.63,
+      // Oitava 4 (F4 → E5)
+      349.23,
+      392.0,
+      440.0,
+      466.16,
+      523.25,
+      587.33,
+      659.26,
+      // Oitava 5 (F5 → E6)
+      698.46,
+      783.99,
+      880.0,
+      932.33,
+      1046.5,
+      1174.66,
+      1318.51,
+      // Fechando a 4ª oitava: F6
+      1396.91,
+    ];
+
+    function setup() {
+      let container = select('#gameContainer');
+      let sizeCanvas = min(windowWidth, windowHeight);
+      let canvas = createCanvas(sizeCanvas, sizeCanvas);
+      canvas.parent(container);
+      
+      osc1 = new p5.Oscillator("sine");
+      osc1.amp(0);
+      osc2 = new p5.Oscillator("square");
+      osc2.amp(0); // volume inicial zero
+      
+      freq = 349.23;
+      osc1.start();
+      osc2.start();
+      osc1.freq(freq);
+      osc2.freq(freq);
+      n = 7;
+    }
+
+    function draw() {
+      background(0);
+
+      noStroke();
+      fill("red");
+      textSize(40);
+      textAlign(LEFT);
+      text("SQUARE", width * 0.02, height / 2);
+
+      fill("blue");
+      textAlign(RIGHT);
+      text("SINE", width - width * 0.05, height / 2);
+      fill("lightgreen");
+      textAlign(CENTER);
+      text("Agudo", width / 2, height / 8);
+      fill("orange");
+      textSize(40);
+      textAlign(CENTER);
+      text("Grave", width / 2, height - height / 6);
+      fill(255);
+      textSize(20);
+      textAlign(CENTER);
+      text("Click e segure, então arraste", width / 2, height - height / 2);
+
+      let amp = map(mouseX, 0, width, 0, 0.8); // timbre inicial
+      vol = 0.5;
+      cor3 = map(mouseX, 0, width, 60, 255);
+      cor2 = map(freq, 200, 600, 80, 255);
+      cor1 = map(mouseX, width, 0, 60, 255);
+      alfa = map(mouseY, height, 0, 60, 255);
+      freq = map(mouseY, height, height/16, 220, 2200);
+      
+      if (mouseIsPressed === true) {
+        osc1.freq(freq);
+        osc1.amp(map(mouseX, 0, width, 0, 0.6) * vol, 0.5);
+        osc2.freq(freq / 2);
+        osc2.amp(map(mouseX, width, 0, 0, 0.1) * vol, 0.5); // transição suave de 0.05s
+        fill(cor1, cor2, cor3, alfa);
+        circle(mouseX, mouseY, map(vol, 0, 1, 10, 200));
+      } else {
+        osc1.amp(0, 0.5);
+        osc2.amp(0, 0.5);
+      }
+    }
+
+    function mouseWheel(event) {
+      if (event.delta < 0 && n < faMaior.length - 1) {
+        n++; // sobe nota
+      } else if (event.delta > 0 && n > 0) {
+        n--; // desce nota
+      }
+
+      freq = faMaior[n];
+      console.log("n:", n, "freq:", freq);
+    }
+    
+    function mouseClicked() {
+      // Inicia o áudio quando o usuário interage pela primeira vez
+      userStartAudio();
+    }
+  </script>
+</body>
+</html>
