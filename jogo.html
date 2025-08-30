@@ -104,15 +104,15 @@
 
       // Textos
       textFont('cursive'); noStroke();
-      fill("darkred"); textSize(60); textAlign(LEFT);
-      text("SQUARE", width*0.02, height/2);
-      fill("midnightblue"); textAlign(RIGHT); text("SINE", width - width*0.05, height/3);
+      fill("red"); textSize(60); textAlign(LEFT);
+      text("SQUARE", width*0.02, height-height/3);
+      fill("blue"); textAlign(RIGHT); text("SINE", width - width*0.05, height-height/3);
       fill("lightgreen"); textAlign(CENTER); text("Volume", width/2, height/8);
 
-      fill(255); textSize(20);
-      text("1.Escolha um modo escalar", width/2, height - height/1.5);
-      text("2.Click, segure e arraste pela tela", width/2, height - height/1.75);
-      text("3.MouseScroll para notas da escala", width/2, height - height/3);
+      fill(255); textSize(25);
+      text("1.Escolha um modo escalar", width/2,  height/4);
+      text("2.Click, segure e arraste pela tela", width/2,  height/3.6);
+      text("3.MouseScroll para notas da escala", width/2,  height/3.3);
 
       // Mapeamento
       vol = map(mouseY, height - alturaBotao, 0, 0, 1);
