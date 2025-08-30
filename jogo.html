@@ -326,7 +326,7 @@
       // Som interativo
       if(mouseIsPressed && mouseY < height - alturaBotao){
         osc1.freq(freq); 
-        osc1.amp(map(mouseX, 0, width, 0, 0.7) * vol, 0.1);
+        osc1.amp(map(mouseX, 0, width, 0, 0.5) * vol, 0.1);
         osc2.freq(freq); 
         osc2.amp(map(mouseX, width, 0, 0, 0.05) * vol, 0.1);
         fill(cor1, cor2, cor3, alfa);
