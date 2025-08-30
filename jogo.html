@@ -101,7 +101,7 @@
       let xi = (width - drawWidth)/2;
       let yi = (height - drawHeight)/2;
       image(img, xi, yi, drawWidth, drawHeight);
-
+      
       // Textos
       textFont('cursive'); noStroke();
       fill("indianred"); textSize(50); textAlign(LEFT);
@@ -110,9 +110,9 @@
       fill("lightgreen"); textAlign(CENTER); text("Volume", width/2, height/8);
 
       fill(255); textSize(23);
-      text("1.Escolha um modo escalar", width/2,  height/4);
-      text("2.Click, segure e arraste pela tela", width/2,  height/3.5);
-      text("3.MouseScroll para notas da escala", width/2,  height/3.2);
+      text("1.Escolha um modo escalar", width/2,  height/1.5);
+      text("2.Click, segure e arraste pela tela", width/2,  height/2);
+      text("3.MouseScroll para notas da escala", width/2,  height/3);
 
       // Mapeamento
       vol = map(mouseY, height - alturaBotao, 0, 0, 1);
