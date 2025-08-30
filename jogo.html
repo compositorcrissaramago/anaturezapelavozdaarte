@@ -3,19 +3,27 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Jogo</title>
+  <title>Jogo - Sonificação de Dados</title>
+  <link href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css" rel="stylesheet" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/addons/p5.sound.min.js"></script>
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&display=swap');
+
     html, body {
       margin: 0;
       padding: 0;
+      height: 100%;
       overflow: hidden;
       background: black;
-      
-      nav {
-      background-color: rgba(244, 241, 234, 0.6);
-      color: #3d2e20;
+      font-family: 'Merriweather', serif;
+      color: #f4f1ea;
+    }
+
+    /* Menu fixo no topo - versão escura */
+    nav {
+      background-color: rgba(20, 20, 20, 0.8);
+      color: #f4f1ea;
       border-radius: 0;
       margin: 0;
       position: fixed;
@@ -24,40 +32,211 @@
       right: 0;
       z-index: 1000;
       backdrop-filter: blur(20px);
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
       padding: 0.5rem 1rem;
     }
+
+    nav .container-fluid {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
     }
+
+    nav ul {
+      margin: 0;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    nav ul li {
+      list-style: none;
+      margin: 0;
+    }
+
+    nav a {
+      color: #f4f1ea;
+      text-decoration: none;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      transition: background-color 0.3s ease;
+    }
+
+    nav a:hover {
+      background-color: rgba(244, 241, 234, 0.2);
+    }
+
+    nav a[role="button"] {
+      background: none !important;
+      border: none !important;
+      box-shadow: none !important;
+      color: #f4f1ea !important;
+    }
+
+    /* Link do DataSonar Labs */
+    .logo-link {
+      color: #f4f1ea !important;
+      font-size: 1.5rem;
+      font-weight: 700;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+      text-decoration: none;
+    }
+
+    .logo-link:hover {
+      background-color: rgba(244, 241, 234, 0.2);
+    }
+
+    /* Container do jogo */
     #gameContainer {
       display: flex;
       justify-content: center;
       align-items: center;
       width: 100vw;
-      height: 100vh;
+      height: calc(100vh - 80px); /* Altura total menos a altura do menu */
+      margin-top: 80px; /* Compensa o menu fixo */
     }
+    
     canvas {
       display: block;
     }
+
+    /* Instruções do jogo (opcional) */
+    .game-instructions {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: rgba(0, 0, 0, 0.7);
+      color: #f4f1ea;
+      padding: 10px 15px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      text-align: center;
+      max-width: 90%;
+      backdrop-filter: blur(5px);
+    }
+
+    /* Responsividade para mobile */
+    @media (max-width: 768px) {
+      body {
+        padding-top: 100px !important;
+      }
+
+      nav {
+        height: auto;
+        min-height: 50px;
+        padding: 0.3rem 0.2rem !important;
+      }
+
+      nav .container-fluid {
+        flex-direction: column !important;
+        align-items: center;
+        justify-content: center;
+        gap: 0.3rem !important;
+        padding: 0.2rem !important;
+      }
+
+      .logo-link {
+        font-size: 1.5rem !important;
+        padding: 0.1rem 0 !important;
+        margin: 0 !important;
+      }
+
+      nav ul {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.4rem !important;
+        width: 100%;
+        padding: 0;
+      }
+
+      nav a {
+        font-size: 0.8rem !important;
+        padding: 0.2rem 0.5rem !important;
+      }
+      
+      #gameContainer {
+        height: calc(100vh - 100px);
+        margin-top: 100px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      body {
+        padding-top: 100px !important;
+      }
+
+      nav {
+        min-height: 40px;
+        padding: 0.1rem 0.1rem !important;
+      }
+
+      .logo-link {
+        font-size: 1.5rem !important;
+      }
+
+      nav a {
+        font-size: 0.85rem !important;
+        padding: 0.1rem 0.1rem !important;
+      }
+
+      nav ul {
+        gap: 0.8rem !important;
+      }
+    }
+
+    /* Telas extremamente estreitas */
+    @media (max-width: 360px) {
+      body {
+        padding-top: 60px !important;
+      }
+
+      nav {
+        min-height: 60px;
+      }
+
+      .logo-link {
+        font-size: 0.85rem !important;
+      }
+
+      nav a {
+        font-size: 0.7rem !important;
+        padding: 0.1rem 0.3rem !important;
+      }
+
+      nav ul {
+        gap: 0.2rem !important;
+      }
+    }
   </style>
 </head>
+
 <body>
   <nav>
-   <div class="container-fluid">
-     <div>
-      <a href="index.html" class="logo-link">DataSonar Labs</a>
-      <div style="margin: 0.8rem 0;"></div>
-     </div>
+    <div class="container-fluid">
+      <div>
+        <a href="index.html" class="logo-link">DataSonar Labs</a>
+        <div style="margin: 0.8rem 0;"></div>
+      </div>
       <ul>
-       <li><a href="index.html">Início</a></li>
-       <li><a href="progresso.html">Progresso</a></li>
-       <li><a href="experiencia.html">Experiência</a></li>
-       <li><a href="sobre.html">Sobre</a></li>
-       <!-- Novo item do menu -->
-       <li><a href="jogo.html">Jogo</a></li>
+        <li><a href="index.html">Início</a></li>
+        <li><a href="progresso.html">Progresso</a></li>
+        <li><a href="experiencia.html">Experiência</a></li>
+        <li><a href="sobre.html">Sobre</a></li>
+        <li><a href="jogo.html">Jogo</a></li>
       </ul>
-   </div>
+    </div>
   </nav>
+
   <div id="gameContainer"></div>
+  
+  <div class="game-instructions">
+    Clique em um modo escalar abaixo, depois clique e arraste na tela para criar sons. Use a roda do mouse para mudar as notas.
+  </div>
 
   <script>
     let container;
@@ -90,7 +269,7 @@
 
     function setup() {
       container = select('#gameContainer');
-      sizeCanvas = min(windowWidth, windowHeight);
+      sizeCanvas = min(windowWidth, windowHeight - 80); // Considera a altura do menu
       canvas = createCanvas(sizeCanvas, sizeCanvas);
       canvas.parent(container);
 
@@ -109,7 +288,7 @@
     }
 
     function windowResized() {
-      sizeCanvas = min(windowWidth, windowHeight);
+      sizeCanvas = min(windowWidth, windowHeight - 80); // Considera a altura do menu
       resizeCanvas(sizeCanvas, sizeCanvas);
       larguraBotao = width / nBotoes;
       alturaBotao = height / 6;
