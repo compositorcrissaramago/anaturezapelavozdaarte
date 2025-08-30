@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Jogo - Sonificação de Dados</title>
+  <title>Experiências Sonoras - DataSonar Labs</title>
   <link href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css" rel="stylesheet" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/addons/p5.sound.min.js"></script>
@@ -14,7 +14,7 @@
       margin: 0;
       padding: 0;
       height: 100%;
-      overflow: hidden;
+      overflow-x: hidden;
       background: black;
       font-family: 'Merriweather', serif;
       color: #f4f1ea;
@@ -70,13 +70,6 @@
       background-color: rgba(244, 241, 234, 0.2);
     }
 
-    nav a[role="button"] {
-      background: none !important;
-      border: none !important;
-      box-shadow: none !important;
-      color: #f4f1ea !important;
-    }
-
     /* Link do DataSonar Labs */
     .logo-link {
       color: #f4f1ea !important;
@@ -90,111 +83,90 @@
       background-color: rgba(244, 241, 234, 0.2);
     }
 
+    /* Container principal */
+    .main-container {
+      display: flex;
+      flex-direction: column;
+      width: 100vw;
+      min-height: 100vh;
+      padding-top: 80px;
+    }
+
+    /* Seção de jogos */
+    .games-section {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 2rem;
+      padding: 2rem;
+    }
+
+    .game-card {
+      background-color: rgba(30, 30, 30, 0.8);
+      border-radius: 12px;
+      padding: 1.5rem;
+      width: 300px;
+      text-align: center;
+      backdrop-filter: blur(5px);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+      transition: transform 0.3s ease;
+    }
+
+    .game-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .game-card h3 {
+      color: #f4f1ea;
+      margin-bottom: 1rem;
+    }
+
+    .game-card p {
+      color: #ccc;
+      margin-bottom: 1.5rem;
+    }
+
+    .game-link {
+      display: inline-block;
+      background-color: #4a3728;
+      color: #f4f1ea;
+      padding: 0.5rem 1.5rem;
+      border-radius: 4px;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+    }
+
+    .game-link:hover {
+      background-color: #3d2e20;
+    }
+
     /* Container do jogo */
     #gameContainer {
       display: flex;
       justify-content: center;
       align-items: center;
       width: 100vw;
-      height: calc(100vh - 80px); /* Altura total menos a altura do menu */
-      margin-top: 80px; /* Compensa o menu fixo */
+      height: calc(100vh - 80px);
+      margin-top: 80px;
     }
     
     canvas {
       display: block;
     }
 
-
-    /* Responsividade para mobile */
+    /* Responsividade */
     @media (max-width: 768px) {
-      body {
-        padding-top: 100px !important;
-      }
-
-      nav {
-        height: auto;
-        min-height: 50px;
-        padding: 0.3rem 0.2rem !important;
-      }
-
-      nav .container-fluid {
-        flex-direction: column !important;
+      .games-section {
+        flex-direction: column;
         align-items: center;
-        justify-content: center;
-        gap: 0.3rem !important;
-        padding: 0.2rem !important;
-      }
-
-      .logo-link {
-        font-size: 1.5rem !important;
-        padding: 0.1rem 0 !important;
-        margin: 0 !important;
-      }
-
-      nav ul {
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 0.4rem !important;
-        width: 100%;
-        padding: 0;
-      }
-
-      nav a {
-        font-size: 0.8rem !important;
-        padding: 0.2rem 0.5rem !important;
       }
       
-      #gameContainer {
-        height: calc(100vh - 100px);
-        margin-top: 100px;
+      .game-card {
+        width: 80%;
       }
-    }
-
-    @media (max-width: 480px) {
-      body {
-        padding-top: 100px !important;
-      }
-
-      nav {
-        min-height: 40px;
-        padding: 0.1rem 0.1rem !important;
-      }
-
-      .logo-link {
-        font-size: 1.5rem !important;
-      }
-
-      nav a {
-        font-size: 0.85rem !important;
-        padding: 0.1rem 0.1rem !important;
-      }
-
-      nav ul {
-        gap: 0.8rem !important;
-      }
-    }
-
-    /* Telas extremamente estreitas */
-    @media (max-width: 360px) {
-      body {
-        padding-top: 60px !important;
-      }
-
-      nav {
-        min-height: 60px;
-      }
-
-      .logo-link {
-        font-size: 0.85rem !important;
-      }
-
-      nav a {
-        font-size: 0.7rem !important;
-        padding: 0.1rem 0.3rem !important;
-      }
-
-      nav ul {
-        gap: 0.2rem !important;
+      
+      nav .container-fluid {
+        flex-direction: column;
       }
     }
   </style>
@@ -212,192 +184,30 @@
         <li><a href="progresso.html">Progresso</a></li>
         <li><a href="experiencia.html">Experiência</a></li>
         <li><a href="sobre.html">Sobre</a></li>
-        <li><a href="jogo.html">Jogo</a></li>
+        <li><a href="jogos.html">Jogos</a></li>
       </ul>
     </div>
   </nav>
 
-  <div id="gameContainer"></div>
-  
+  <div class="main-container">
+    <div class="games-section">
+      <div class="game-card">
+        <h3>Jogo Original</h3>
+        <p>Explore diferentes escalas musicais com sintetizadores de onda senoidal e quadrada.</p>
+        <a href="jogo_original.html" class="game-link">Jogar</a>
+      </div>
+      
+      <div class="game-card">
+        <h3>Controle de Tom e Timbre</h3>
+        <p>Experimente com controle contínuo de pitch e alternância entre sawtooth e sine.</p>
+        <a href="jogo_tom_timbre.html" class="game-link">Jogar</a>
+      </div>
+    </div>
+  </div>
+
   <script>
-    let container;
-    let canvas;
-    let sizeCanvas;
-
-    let img;
-    let vol, timb;
-    let osc1, osc2;
-    let freq = 349.23; // Inicializa a variável freq
-    let cor1, cor2, cor3, alfa;
-    let n;
-    let escn = ["Mixolídio","Maior", "Menor H", "Menor M", "Dórico"];
-    let escalas;
-    let botaoAtivo = -1;
-
-    let escalaMaior = [174.61,196,220,233.08,261.63,293.66,329.63,349.23,392,440,466.16,523.25,587.33,659.26,698.46];
-    let escalaMenorHarmonica = [174.61,196,207.65,233.08,261.63,277.18,329.63,349.23,392,415.3,466.16,523.25,554.36,659.26,698.46];
-    let escalaMenorMelodica = [174.61,196,207.65,233.08,261.63,293.66,329.63,349.23,392,415.3,466.16,523.25,587.33,659.26,698.46];
-    let escalaMixolidia = [174.61,196,220,233.08,261.63,293.66,311.13,349.23,392,440,466.16,523.25,587.33,622.25,698.46];
-    let escalaDorica = [174.61,196,207.65,233.08,261.63,293.66,311.13,349.23,392,415.3,466.16,523.25,587.33,622.25,698.46];
-
-    let escalasPorBotao = [ escalaMixolidia, escalaMaior, escalaMenorHarmonica, escalaMenorMelodica, escalaDorica];
-    let nBotoes = 5;
-    let larguraBotao, alturaBotao;
-
-    function preload() {
-      img = loadImage("https://raw.githubusercontent.com/compositorcrissaramago/anaturezapelavozdaarte/refs/heads/main/attached_assets/Gemini_Generated_Image_94of6c94of6c94of.png");
-    }
-
-    function setup() {
-      container = select('#gameContainer');
-      sizeCanvas = min(windowWidth, windowHeight - 80);
-      canvas = createCanvas(sizeCanvas, sizeCanvas);
-      canvas.parent(container);
-
-      // Osciladores
-      osc1 = new p5.Oscillator("sine"); 
-      osc1.amp(0);
-      osc2 = new p5.Oscillator("square"); 
-      osc2.amp(0);
-      
-      n = 7;
-      larguraBotao = width / nBotoes;
-      alturaBotao = height / 6;
-
-      escalas = escalaMaior;
-      freq = escalas[n]; // Define a frequência inicial baseada na escala
-      
-      osc1.freq(freq); 
-      osc2.freq(freq);
-    }
-
-    function windowResized() {
-      sizeCanvas = min(windowWidth, windowHeight - 80);
-      resizeCanvas(sizeCanvas, sizeCanvas);
-      larguraBotao = width / nBotoes;
-      alturaBotao = height / 6;
-    }
-
-    function draw() {
-      background(0);
-      
-      // Imagem proporcional
-      let imgAspect = img.width / img.height;
-      let canvasAspect = width / height;
-      let drawWidth, drawHeight;
-      if(canvasAspect > imgAspect){
-        drawHeight = height;
-        drawWidth = imgAspect * height;
-      } else {
-        drawWidth = width;
-        drawHeight = width / imgAspect;
-      }
-      let xi = (width - drawWidth)/2;
-      let yi = (height - drawHeight)/2;
-      image(img, xi, yi, drawWidth, drawHeight);
-      
-      // Textos
-      textFont('cursive'); 
-      noStroke();
-      fill("crimson"); 
-      textSize(50); 
-      textAlign(LEFT);
-      text("Square", width*0.01, height-height/2.5);
-      fill("turquoise"); 
-      textAlign(RIGHT); 
-      text("Sine", width - width*0.02, height-height/2.5);
-      fill("lightgreen"); 
-      textAlign(CENTER); 
-      text("Volume", width/2, height/8);
-
-      fill(255); 
-      textSize(23);
-      text("3.MouseScroll para notas da escala", width/2, height/2);
-      text("2.Clique, segure e arraste pela tela", width/2, height/2.2);
-      text("1.Escolha um modo escalar e clique", width/2, height/2.5);
-
-      // Mapeamento
-      vol = map(mouseY, height - alturaBotao, 0, 0, 1);
-      cor3 = map(mouseX, 0, width, 60, 255);
-      cor2 = map(freq, 200, 600, 80, 255);
-      cor1 = map(mouseX, width, 0, 60, 255);
-      alfa = map(mouseY, height, 0, 60, 255);
-
-      // Som interativo
-      if(mouseIsPressed && mouseY < height - alturaBotao){
-        osc1.freq(freq); 
-        osc1.amp(map(mouseX, 0, width, 0, 0.5) * vol, 0.1);
-        osc2.freq(freq); 
-        osc2.amp(map(mouseX, width, 0, 0, 0.05) * vol, 0.1);
-        fill(cor1, cor2, cor3, alfa);
-        circle(mouseX, mouseY, map(vol, 0, 1, 10, 200));
-      } else {
-        osc1.amp(0, 0.1); 
-        osc2.amp(0, 0.1);
-      }
-
-      // Botões
-      for(let i = 0; i < nBotoes; i++){
-        let xBotao = i * larguraBotao;
-        let yBotao = height - alturaBotao;
-        
-        // Cores pastéis do arco-íris
-        let coresPastel = [
-          [255, 150, 150],  // Vermelho pastel
-          [255, 200, 150],  // Laranja pastel
-          [255, 255, 150],  // Amarelo pastel
-          [150, 255, 150],  // Verde pastel
-          [150, 200, 255]   // Azul pastel
-        ];
-        fill(coresPastel[i][0], coresPastel[i][1], coresPastel[i][2]);
-        
-        rect(xBotao, yBotao, larguraBotao, alturaBotao);
-        fill(0); 
-        textAlign(CENTER, CENTER); 
-        textSize(16);
-        text(escn[i], xBotao + larguraBotao/2, yBotao + alturaBotao/2);
-      }
-
-      // Botão ativo
-      if(botaoAtivo >= 0){
-        let xBotao = botaoAtivo * larguraBotao;
-        let yBotao = height - alturaBotao;
-        fill(255, 255, 0, 100); 
-        noStroke();
-        rect(xBotao, yBotao, larguraBotao, alturaBotao);
-      }
-    }
-
-    function mouseClicked(){
-      userStartAudio().then(() => {
-        if(!osc1.started) osc1.start();
-        if(!osc2.started) osc2.start();
-      });
-
-      if(mouseY > height - alturaBotao){
-        let indiceBotao = floor(mouseX / larguraBotao);
-        escalas = escalasPorBotao[indiceBotao];
-        n = 7; // SEMPRE define n=7 quando qualquer botão for clicado
-        freq = escalas[n];
-        botaoAtivo = indiceBotao;
-        console.log(escn[indiceBotao]);
-      }
-      
-      // Atualiza os osciladores com a frequência atual
-      osc1.freq(freq);
-      osc2.freq(freq);
-    }
-
-    function mouseWheel(event){
-      if(!escalas) return;
-      if(event.delta < 0 && n < escalas.length - 1) n++;
-      else if(event.delta > 0 && n > 0) n--;
-      freq = escalas[n];
-      
-      // Atualiza os osciladores com a nova frequência
-      osc1.freq(freq);
-      osc2.freq(freq);
-    }
+    // Esta página é apenas para redirecionamento
+    // Os scripts dos jogos estão em suas respectivas páginas
   </script>
 </body>
 </html>
