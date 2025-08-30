@@ -5,8 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Experiências Sonoras - DataSonar Labs</title>
   <link href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css" rel="stylesheet" />
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/addons/p5.sound.min.js"></script>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&display=swap');
 
@@ -85,20 +83,31 @@
 
     /* Container principal */
     .main-container {
-      display: flex;
-      flex-direction: column;
       width: 100vw;
       min-height: 100vh;
       padding-top: 80px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
 
-    /* Seção de jogos */
-    .games-section {
+    /* Título da página */
+    .page-title {
+      text-align: center;
+      margin: 2rem 0;
+      color: #f4f1ea;
+      font-size: 2.5rem;
+    }
+
+    /* Seção de jogos - layout de catálogo */
+    .games-catalog {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
       gap: 2rem;
       padding: 2rem;
+      max-width: 1200px;
+      width: 100%;
     }
 
     .game-card {
@@ -119,54 +128,60 @@
     .game-card h3 {
       color: #f4f1ea;
       margin-bottom: 1rem;
+      font-size: 1.5rem;
     }
 
     .game-card p {
       color: #ccc;
       margin-bottom: 1.5rem;
+      line-height: 1.5;
     }
 
     .game-link {
       display: inline-block;
       background-color: #4a3728;
       color: #f4f1ea;
-      padding: 0.5rem 1.5rem;
+      padding: 0.7rem 1.8rem;
       border-radius: 4px;
       text-decoration: none;
       transition: background-color 0.3s ease;
+      font-weight: bold;
     }
 
     .game-link:hover {
       background-color: #3d2e20;
-    }
-
-    /* Container do jogo */
-    #gameContainer {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      width: 100vw;
-      height: calc(100vh - 80px);
-      margin-top: 80px;
-    }
-    
-    canvas {
-      display: block;
+      transform: scale(1.05);
     }
 
     /* Responsividade */
     @media (max-width: 768px) {
-      .games-section {
+      .games-catalog {
         flex-direction: column;
         align-items: center;
       }
       
       .game-card {
         width: 80%;
+        max-width: 350px;
       }
       
       nav .container-fluid {
         flex-direction: column;
+      }
+      
+      .page-title {
+        font-size: 2rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .game-card {
+        width: 90%;
+        padding: 1.2rem;
+      }
+      
+      .game-card h3 {
+        font-size: 1.3rem;
       }
     }
   </style>
@@ -188,21 +203,36 @@
       </ul>
     </div>
   </nav>
+
+  <div class="main-container">
+    <h1 class="page-title">Experiências Sonoras Interativas</h1>
+    
+    <div class="games-catalog">
+      <div class="game-card">
+        <h3>Jogo Original</h3>
+        <p>Explore diferentes escalas musicais com sintetizadores de onda senoidal e quadrada. Clique nos botões para alternar entre escalas e use a roda do mouse para navegar pelas notas.</p>
+        <a href="jogo_original.html" class="game-link">Jogar</a>
+      </div>
+      
       <div class="game-card">
         <h3>Controle de Tom e Timbre</h3>
-        <p>Experimente com controle contínuo de pitch e alternância entre sawtooth e sine.</p>
-        <a href="jogo1.html" class="game-link">Jogar</a>
+        <p>Experimente com controle contínuo de pitch e alternância entre sawtooth e sine. Movimente o mouse verticalmente para alterar o tom e horizontalmente para ajustar o timbre.</p>
+        <a href="jogo_tom_timbre.html" class="game-link">Jogar</a>
+      </div>
+      
+      <div class="game-card">
+        <h3>Sonificação de Dados Ambientais</h3>
+        <p>Uma experiência que transforma dados climáticos em tempo real em composições sonoras. Conecte-se com a natureza através da música generativa.</p>
+        <a href="em_desenvolvimento.html" class="game-link">Em Breve</a>
+      </div>
+      
+      <div class="game-card">
+        <h3>Improviso Algorithmico</h3>
+        <p>Colabore com algoritmos de IA para criar performances musicais únicas. O sistema responde às suas intervenções com variações melódicas harmoniosas.</p>
+        <a href="em_desenvolvimento.html" class="game-link">Em Breve</a>
       </div>
     </div>
   </div>
-  <div class="main-container">
-    <div class="games-section">
-      <div class="game-card">
-        <h3>Jogo Original</h3>
-        <p>Explore diferentes escalas musicais com sintetizadores de onda senoidal e quadrada.</p>
-        <a href="jogo2.html" class="game-link">Jogar</a>
-      </div>
-      
 
   <script>
     // Esta página é apenas para redirecionamento
@@ -210,6 +240,4 @@
   </script>
 </body>
 </html>
-  </script>
-</body>
 </html>
