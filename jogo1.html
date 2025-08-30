@@ -38,12 +38,10 @@
       cursor: pointer;
       z-index: 1000;
     }
-    
-    }
   </style>
 </head>
 <body>
-  <button class="back-button" onclick="window.location.href='jogo.html'">← Voltar</button>
+  <button class="back-button" onclick="window.location.href='jogos.html'">← Voltar</button>
   <div id="gameContainer"></div>
 
   <script>
@@ -83,15 +81,17 @@
     ];
 
     function setup() {
-      
+      // Corrigindo o posicionamento do canvas
+      let container = document.getElementById('gameContainer');
       let sizeCanvas = min(windowWidth, windowHeight);
       let canvas = createCanvas(sizeCanvas, sizeCanvas);
+      canvas.parent('gameContainer');
       
-      
+      // Inicializando osciladores
       osc1 = new p5.Oscillator("sine");
       osc1.amp(0);
       osc2 = new p5.Oscillator("square");
-      osc2.amp(0); // volume inicial zero
+      osc2.amp(0);
       
       freq = 349.23;
       osc1.start();
@@ -99,6 +99,13 @@
       osc1.freq(freq);
       osc2.freq(freq);
       n = 7;
+      
+      // Inicializando variáveis de cor
+      cor1 = 100;
+      cor2 = 100;
+      cor3 = 100;
+      alfa = 100;
+      vol = 0.5;
     }
 
     function draw() {
@@ -106,47 +113,57 @@
 
       noStroke();
       fill("red");
-      textSize(40);
+      textSize(30);
       textAlign(LEFT);
       text("SQUARE", width * 0.02, height / 2);
 
       fill("blue");
       textAlign(RIGHT);
       text("SINE", width - width * 0.05, height / 2);
+      
       fill("lightgreen");
       textAlign(CENTER);
       text("Agudo", width / 2, height / 8);
+      
       fill("orange");
-      textSize(40);
+      textSize(30);
       textAlign(CENTER);
-      text("Grave", width / 2, height - height / 6);
+      text("Grave", width / 2, height - height / 8);
+      
       fill(255);
-      textSize(20);
+      textSize(16);
       textAlign(CENTER);
-      text("Click e segure, então arraste", width / 2, height - height / 2);
+      text("Click e segure, então arraste", width / 2, height / 2);
 
-      let amp = map(mouseX, 0, width, 0, 0.8); // timbre inicial
-      vol = 0.5;
+      // Mapeamento de valores
+      let amp = map(mouseX, 0, width, 0, 0.8);
       cor3 = map(mouseX, 0, width, 60, 255);
       cor2 = map(freq, 200, 600, 80, 255);
       cor1 = map(mouseX, width, 0, 60, 255);
       alfa = map(mouseY, height, 0, 60, 255);
-      freq = map(mouseY, height, height/16, 220, 2200);
+      
+      // Controle de frequência pelo mouse Y
+      freq = map(mouseY, height, 0, 220, 2200);
       
       if (mouseIsPressed === true) {
+        // Ativa os osciladores quando o mouse é pressionado
         osc1.freq(freq);
-        osc1.amp(map(mouseX, 0, width, 0, 0.6) * vol, 0.5);
+        osc1.amp(map(mouseX, 0, width, 0, 0.6) * vol, 0.1);
         osc2.freq(freq / 2);
-        osc2.amp(map(mouseX, width, 0, 0, 0.1) * vol, 0.5); // transição suave de 0.05s
+        osc2.amp(map(mouseX, width, 0, 0, 0.1) * vol, 0.1);
+        
+        // Desenha círculo visual
         fill(cor1, cor2, cor3, alfa);
         circle(mouseX, mouseY, map(vol, 0, 1, 10, 200));
       } else {
-        osc1.amp(0, 0.5);
-        osc2.amp(0, 0.5);
+        // Desativa os osciladores quando o mouse não está pressionado
+        osc1.amp(0, 0.1);
+        osc2.amp(0, 0.1);
       }
     }
 
     function mouseWheel(event) {
+      // Navega pelas notas da escala com a roda do mouse
       if (event.delta < 0 && n < faMaior.length - 1) {
         n++; // sobe nota
       } else if (event.delta > 0 && n > 0) {
@@ -159,7 +176,15 @@
     
     function mouseClicked() {
       // Inicia o áudio quando o usuário interage pela primeira vez
-      userStartAudio();
+      getAudioContext().resume().then(() => {
+        console.log("Áudio ativado!");
+      });
+    }
+
+    function windowResized() {
+      // Redimensiona o canvas quando a janela é redimensionada
+      let sizeCanvas = min(windowWidth, windowHeight);
+      resizeCanvas(sizeCanvas, sizeCanvas);
     }
   </script>
 </body>
