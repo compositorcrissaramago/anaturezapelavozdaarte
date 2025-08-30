@@ -94,10 +94,10 @@
     ];
 
     function setup() {
-      let container = select('#gameContainer');
+      
       let sizeCanvas = min(windowWidth, windowHeight);
       let canvas = createCanvas(sizeCanvas, sizeCanvas);
-      canvas.parent(container);
+      
       
       osc1 = new p5.Oscillator("sine");
       osc1.amp(0);
