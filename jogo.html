@@ -4,24 +4,44 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Jogo</title>
-  <!-- Biblioteca p5.js -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
-  <!-- Biblioteca de som -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/addons/p5.sound.min.js"></script>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background: black;
+    }
+    #gameContainer {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100vw;
+      height: 100vh;
+    }
+    canvas {
+      display: block;
+    }
+  </style>
 </head>
 <body>
-
+  <div id="gameContainer"></div>
 
   <script>
+    let container;
+    let canvas;
+    let sizeCanvas;
+
     let img;
     let vol, timb;
     let osc1, osc2;
     let freq;
     let cor1, cor2, cor3, alfa;
-    let n; // contador de notas
+    let n;
     let escn = ["Maior", "Menor H", "Menor M", "Mixolídio", "Dórico"];
     let escalas;
-    let botaoAtivo = -1; // botão ativo
+    let botaoAtivo = -1;
 
     let escalaMaior = [174.61,196,220,233.08,261.63,293.66,329.63,349.23,392,440,466.16,523.25,587.33,659.26,698.46];
     let escalaMenorHarmonica = [174.61,196,207.65,233.08,261.63,277.18,329.63,349.23,392,415.3,466.16,523.25,554.36,659.26,698.46];
@@ -30,7 +50,6 @@
     let escalaDorica = [174.61,196,207.65,233.08,261.63,293.66,311.13,349.23,392,415.3,466.16,523.25,587.33,622.25,698.46];
 
     let escalasPorBotao = [escalaMaior, escalaMenorHarmonica, escalaMenorMelodica, escalaMixolidia, escalaDorica];
-
     let nBotoes = 5;
     let larguraBotao, alturaBotao;
 
@@ -39,25 +58,30 @@
     }
 
     function setup() {
-      createCanvas(windowWidth, windowHeight);
+      container = select('#gameContainer');
+      sizeCanvas = min(windowWidth, windowHeight);
+      canvas = createCanvas(sizeCanvas, sizeCanvas);
+      canvas.parent(container);
 
-      // Cria osciladores mas não inicia
-      osc1 = new p5.Oscillator("sine");
-      osc1.amp(0);
-
-      osc2 = new p5.Oscillator("square");
-      osc2.amp(0);
+      // Osciladores
+      osc1 = new p5.Oscillator("sine"); osc1.amp(0);
+      osc2 = new p5.Oscillator("square"); osc2.amp(0);
 
       freq = 349.23;
-      osc1.freq(freq);
-      osc2.freq(freq);
+      osc1.freq(freq); osc2.freq(freq);
 
       n = 7;
       larguraBotao = width / nBotoes;
       alturaBotao = height / 6;
 
-      // Inicializa escala padrão
       escalas = escalaMaior;
+    }
+
+    function windowResized() {
+      sizeCanvas = min(windowWidth, windowHeight);
+      resizeCanvas(sizeCanvas, sizeCanvas);
+      larguraBotao = width / nBotoes;
+      alturaBotao = height / 6;
     }
 
     function draw() {
@@ -67,88 +91,73 @@
       let imgAspect = img.width / img.height;
       let canvasAspect = width / height;
       let drawWidth, drawHeight;
-      if (canvasAspect > imgAspect) {
+      if(canvasAspect > imgAspect){
         drawHeight = height;
         drawWidth = imgAspect * height;
       } else {
         drawWidth = width;
         drawHeight = width / imgAspect;
       }
-      let xi = (width - drawWidth) / 2;
-      let yi = (height - drawHeight) / 2;
+      let xi = (width - drawWidth)/2;
+      let yi = (height - drawHeight)/2;
       image(img, xi, yi, drawWidth, drawHeight);
 
-      // Interface e textos
-      textFont('cursive');
-      noStroke();
-      fill("indianred");
-      textSize(60);
-      textAlign(LEFT);
-      text("SQUARE", width * 0.02, height / 2);
-      fill("cyan");
-      textAlign(RIGHT);
-      text("SINE", width - width * 0.05, height / 2);
-      fill("lightgreen");
-      textAlign(CENTER);
-      text("Volume", width / 2, height / 8);
+      // Textos
+      textFont('cursive'); noStroke();
+      fill("indianred"); textSize(60); textAlign(LEFT);
+      text("SQUARE", width*0.02, height/2);
+      fill("cyan"); textAlign(RIGHT); text("SINE", width - width*0.05, height/2);
+      fill("lightgreen"); textAlign(CENTER); text("Volume", width/2, height/8);
 
-      fill(255);
-      textSize(20);
-      text("1.Escolha um modo escalar", width / 2, height - height / 2.6);
-      text("2.Click, segure e arraste pela tela", width / 2, height - height / 2.95);
-      text("3.MouseScroll para notas da escala", width / 2, height - height / 3.4);
+      fill(255); textSize(20);
+      text("1.Escolha um modo escalar", width/2, height - height/2.6);
+      text("2.Click, segure e arraste pela tela", width/2, height - height/2.95);
+      text("3.MouseScroll para notas da escala", width/2, height - height/3.4);
 
-      // Mapeamento de valores
+      // Mapeamento
       vol = map(mouseY, height - alturaBotao, 0, 0, 1);
       cor3 = map(mouseX, 0, width, 60, 255);
       cor2 = map(freq, 200, 600, 80, 255);
       cor1 = map(mouseX, width, 0, 60, 255);
       alfa = map(mouseY, height, 0, 60, 255);
 
-      // Som e círculo interativo
-      if (mouseIsPressed && mouseY < height - alturaBotao) {
-        osc1.freq(freq);
-        osc1.amp(map(mouseX, 0, width, 0, 1) * vol, 0.1);
-        osc2.freq(freq);
-        osc2.amp(map(mouseX, width, 0, 0, 0.05) * vol, 0.1);
+      // Som interativo
+      if(mouseIsPressed && mouseY < height - alturaBotao){
+        osc1.freq(freq); osc1.amp(map(mouseX, 0, width, 0, 1) * vol, 0.1);
+        osc2.freq(freq); osc2.amp(map(mouseX, width, 0, 0, 0.05) * vol, 0.1);
         fill(cor1, cor2, cor3, alfa);
-        circle(mouseX, mouseY, map(vol, 0, 1, 10, 200));
+        circle(mouseX, mouseY, map(vol,0,1,10,200));
       } else {
-        osc1.amp(0, 0.1);
-        osc2.amp(0, 0.1);
+        osc1.amp(0,0.1); osc2.amp(0,0.1);
       }
 
-      // Botões de escala
-      for (let i = 0; i < nBotoes; i++) {
-        let xBotao = i * larguraBotao;
+      // Botões
+      for(let i=0;i<nBotoes;i++){
+        let xBotao = i*larguraBotao;
         let yBotao = height - alturaBotao;
-        fill(255 * (1 / (i + 1)), 130, 150 + i * 20);
-        rect(xBotao, yBotao, larguraBotao, alturaBotao);
-        fill(255);
-        textAlign(CENTER, CENTER);
-        textSize(16);
-        text(escn[i], xBotao + larguraBotao / 2, yBotao + alturaBotao / 2);
+        fill(255*(1/(i+1)),130,150+i*20);
+        rect(xBotao,yBotao,larguraBotao,alturaBotao);
+        fill(255); textAlign(CENTER,CENTER); textSize(16);
+        text(escn[i], xBotao + larguraBotao/2, yBotao + alturaBotao/2);
       }
 
-      // Indicador botão ativo
-      if (botaoAtivo >= 0) {
+      // Botão ativo
+      if(botaoAtivo>=0){
         let xBotao = botaoAtivo * larguraBotao;
         let yBotao = height - alturaBotao;
-        fill(255, 255, 0, 100);
-        noStroke();
-        rect(xBotao, yBotao, larguraBotao, alturaBotao);
+        fill(255,255,0,100); noStroke();
+        rect(xBotao,yBotao,larguraBotao,alturaBotao);
       }
     }
 
-    function mouseClicked() {
-      // Inicia áudio no clique
-      userStartAudio().then(() => {
-        if (!osc1.started) osc1.start();
-        if (!osc2.started) osc2.start();
+    function mouseClicked(){
+      userStartAudio().then(()=>{
+        if(!osc1.started) osc1.start();
+        if(!osc2.started) osc2.start();
       });
 
-      if (mouseY > height - alturaBotao) {
-        let indiceBotao = floor(mouseX / larguraBotao);
+      if(mouseY>height-alturaBotao){
+        let indiceBotao = floor(mouseX/larguraBotao);
         escalas = escalasPorBotao[indiceBotao];
         n = 0;
         freq = escalas[n];
@@ -157,17 +166,12 @@
       }
     }
 
-    function mouseWheel(event) {
-      if (!escalas) return;
-      if (event.delta < 0 && n < escalas.length - 1) {
-        n++;
-      } else if (event.delta > 0 && n > 0) {
-        n--;
-      }
+    function mouseWheel(event){
+      if(!escalas) return;
+      if(event.delta<0 && n<escalas.length-1) n++;
+      else if(event.delta>0 && n>0) n--;
       freq = escalas[n];
     }
   </script>
 </body>
-</html>
-
 </html>
