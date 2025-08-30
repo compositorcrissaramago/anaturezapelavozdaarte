@@ -15,32 +15,53 @@
       }
       
       body { 
-        background-image: url('attached_assets/ChatGPTImage17dejul.de2025,12_38_12.png');
-        background-size: cover;
-        background-position: center top;
-        background-attachment: scroll;
-        background-repeat: repeat-y;
         font-family: 'Merriweather', serif;
         color: #4a3728;
         min-height: 100vh;
         padding-top: 80px; /* Espaço para o menu fixo */
+        position: relative;
+      }
+
+      /* Container parallax para a imagem de fundo */
+      .parallax-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        overflow: hidden;
+      }
+
+      .parallax-bg {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 120%; /* Altura extra para o efeito de movimento */
+        background-image: url('attached_assets/ChatGPTImage17dejul.de2025,12_38_12.png');
+        background-size: cover;
+        background-position: center top;
+        background-repeat: no-repeat;
+        will-change: transform;
+        transform: translateZ(0);
       }
 
       /* Menu fixo no topo */
-     nav {
-      background-color: rgba(244, 241, 234, 0.6);
-      color: #3d2e20;
-      border-radius: 0;
-      margin: 0;
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 1000;
-      backdrop-filter: blur(20px);
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-      padding: 0.5rem 1rem;
-    }
+      nav {
+        background-color: rgba(244, 241, 234, 0.6);
+        color: #3d2e20;
+        border-radius: 0;
+        margin: 0;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+        backdrop-filter: blur(20px);
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        padding: 0.5rem 1rem;
+      }
 
       nav .container-fluid {
         max-width: 1200px;
@@ -96,14 +117,15 @@
         background-color: rgba(61, 46, 32, 0.1);
       }
 
-      /* Conteúdo principal colado no fundo */
+      /* Conteúdo principal */
       main {
         background-color: transparent;
         border-radius: 0;
         padding: 2rem;
         margin: 0;
         min-height: calc(100vh - 80px);
-        overflow-y: visible;
+        position: relative;
+        z-index: 1;
       }
 
       .content-overlay {
@@ -115,19 +137,20 @@
         backdrop-filter: blur(5px);
         box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
       }
-/* --- MODIFICAÇÕES ALINHAMENTO --- */
-    /* Títulos centralizados */
-        h1, h2, h3, h4, h5, h6 {
-          text-align: center;
+
+      /* --- MODIFICAÇÕES ALINHAMENTO --- */
+      /* Títulos centralizados */
+      h1, h2, h3, h4, h5, h6 {
+        text-align: center;
       }
 
-    /* Parágrafos justificados (sem hifenização) */
-        p {
-          text-align: justify;
-          line-height: 1.6;
-          margin-bottom: 1.5rem;
-          
+      /* Parágrafos justificados (sem hifenização) */
+      p {
+        text-align: justify;
+        line-height: 1.6;
+        margin-bottom: 1.5rem;
       }
+
       h2 {
         font-size: 2.5rem;
         color: #3d2e20;
@@ -158,122 +181,139 @@
         border-radius: 0;
         font-size: 0.8rem;
         backdrop-filter: blur(10px);
+        position: relative;
+        z-index: 1;
       }
 
       /* Responsividade para mobile */
       @media (max-width: 768px) {
-  body {
-    padding-top: 100px !important; /* Ajustado para acomodar as duas linhas */
-  }
+        body {
+          padding-top: 100px !important;
+        }
 
-  nav {
-    height: auto; /* Altura automática para acomodar o conteúdo */
-    min-height: 50px; /* Altura mínima garantida */
-    padding: 0.3rem 0.2rem !important;
-  }
+        nav {
+          height: auto;
+          min-height: 50px;
+          padding: 0.3rem 0.2rem !important;
+        }
 
-  nav .container-fluid {
-    flex-direction: column !important; /* Disposição em coluna */
-    align-items: center;
-    justify-content: center;
-    gap: 0.3rem !important;
-    padding: 0.2rem !important;
-  }
+        nav .container-fluid {
+          flex-direction: column !important;
+          align-items: center;
+          justify-content: center;
+          gap: 0.3rem !important;
+          padding: 0.2rem !important;
+        }
 
-  .logo-link {
-    font-size: 1.5rem !important;
-    padding: 0.1rem 0 !important;
-    margin: 0 !important;
-  }
+        .logo-link {
+          font-size: 1.5rem !important;
+          padding: 0.1rem 0 !important;
+          margin: 0 !important;
+        }
 
-  nav ul {
-    flex-wrap: wrap; /* Permite que os itens quebrem linha se necessário */
-    justify-content: center;
-    gap: 0.4rem !important;
-    width: 100%;
-    padding: 0;
-  }
+        nav ul {
+          flex-wrap: wrap;
+          justify-content: center;
+          gap: 0.4rem !important;
+          width: 100%;
+          padding: 0;
+        }
 
-  nav a {
-    font-size: 0.8rem !important;
-    padding: 0.2rem 0.5rem !important;
-  }
-}
+        nav a {
+          font-size: 0.8rem !important;
+          padding: 0.2rem 0.5rem !important;
+        }
+        
+        .content-overlay {
+          margin-top: 1.5rem;
+          padding: 1.5rem;
+        }
+      }
 
-/* Ajustes para telas muito pequenas */
-@media (max-width: 480px) {
-  body {
-    padding-top: 100px !important;
-  }
+      @media (max-width: 480px) {
+        body {
+          padding-top: 100px !important;
+        }
 
-  nav {
-    min-height: 40px;
-    padding: 0.1rem 0.1rem !important;
-  }
+        nav {
+          min-height: 40px;
+          padding: 0.1rem 0.1rem !important;
+        }
 
-  .logo-link {
-    font-size: 1.5rem !important;
-  }
+        .logo-link {
+          font-size: 1.5rem !important;
+        }
 
-  nav a {
-    font-size: 0.85rem !important;
-    padding: 0.1rem 0.1rem !important;
-  }
+        nav a {
+          font-size: 0.85rem !important;
+          padding: 0.1rem 0.1rem !important;
+        }
 
-  nav ul {
-    gap: 0.8rem !important;
+        nav ul {
+          gap: 0.8rem !important;
+        }
+        
+        .content-overlay {
+          margin-top: 1rem;
+          padding: 1rem;
+        }
+        
+        h2 {
+          font-size: 1.8rem;
+        }
+        
+        h3 {
+          font-size: 1.4rem;
+        }
+      }
 
-  }
-  .content-overlay {
-     margin-top: 1.5rem; /* Espaço extra após o menu */
-  }
-}
-}
-  
+      /* Telas extremamente estreitas */
+      @media (max-width: 360px) {
+        body {
+          padding-top: 60px !important;
+        }
 
-/* Telas extremamente estreitas */
-@media (max-width: 360px) {
-  body {
-    padding-top: 60px !important;
-  }
+        nav {
+          min-height: 60px;
+        }
 
-  nav {
-    min-height: 60px;
-  }
+        .logo-link {
+          font-size: 0.85rem !important;
+        }
 
-  .logo-link {
-    font-size: 0.85rem !important;
-  }
+        nav a {
+          font-size: 0.7rem !important;
+          padding: 0.1rem 0.3rem !important;
+        }
 
-  nav a {
-    font-size: 0.7rem !important;
-    padding: 0.1rem 0.3rem !important;
-  }
+        nav ul {
+          gap: 0.2rem !important;
+        }
+      }
+    </style>
+  </head>
 
-  nav ul {
-    gap: 0.2rem !important;
-  }
-}
-  </style>
-</head>
-
-<body>
-  <nav>
-   <div class="container-fluid">
-     <div>
-      <a href="index.html" class="logo-link">DataSonar Labs</a>
-      <div style="margin: 0.8rem 0;"></div>
-     </div>
-      <ul>
-       <li><a href="index.html">Início</a></li>
-       <li><a href="progresso.html">Progresso</a></li>
-       <li><a href="experiencia.html">Experiência</a></li>
-       <li><a href="sobre.html">Sobre</a></li>
-       <!-- Novo item do menu -->
-       <li><a href="jogo.html">Jogo</a></li>
-      </ul>
-   </div>
-  </nav>
+  <body>
+    <!-- Container parallax para a imagem de fundo -->
+    <div class="parallax-container">
+      <div class="parallax-bg"></div>
+    </div>
+    
+    <nav>
+      <div class="container-fluid">
+        <div>
+          <a href="index.html" class="logo-link">DataSonar Labs</a>
+          <div style="margin: 0.8rem 0;"></div>
+        </div>
+        <ul>
+          <li><a href="index.html">Início</a></li>
+          <li><a href="progresso.html">Progresso</a></li>
+          <li><a href="experiencia.html">Experiência</a></li>
+          <li><a href="sobre.html">Sobre</a></li>
+          <li><a href="jogo.html">Jogo</a></li>
+        </ul>
+      </div>
+    </nav>
 
     <main>
       <div class="content-overlay">
@@ -281,13 +321,19 @@
           <h2>Experiências e parcerias</h2>
           
           <h3>Parcerias com Empresas Eco-Conscientes</h3>
-          <p>O projeto DataSonar Labs busca estabelecer parcerias estratégicas com empresas comprometidas com a sustentabilidade e responsabilidade ambiental. Através da sonificação de dados ambientais, oferecemos uma nova forma de comunicar e sensibilizar sobre questões ecológicas. Empresas podem integrar nossas composições sonoras em suas campanhas de consciência ambiental, eventos corporativos e materiais educacionais, criando uma experiência imersiva que traduz dados climáticos e ambientais em linguagem musical acessível e impactante.</p>
+          <p>O projeto DataSonar Labs busca estabelecer parcerias estratégicas com empresas comprometidas com a sustentabilidade e responsabilidade ambiental. Através da sonificação de dados ambientais, oferecemos uma nova forma de comunicar e sensibilizar sobre questões ecológicas. Empresas podem integrar nossas composições sonoras em suas campanhas de consciência ambiental, eventos corporativos e materiais educacionais, creato uma experiência imersiva que traduz dados climáticos e ambientais em linguagem musical acessível e impactante.</p>
 
           <h3>Parcerias com Estabelecimentos Temáticos</h3>
           <p>Museus de ciências, centros de educação ambiental, planetários e espaços culturais podem incorporar as obras do DataSonar Labs como parte de suas exposições permanentes ou temporárias. Nossa tecnologia oferece uma abordagem inovadora para apresentar dados científicos, transformando informações complexas sobre clima, biodiversidade e fenômenos naturais em experiências sonoras envolventes. Estabelecimentos temáticos podem personalizar as composições para refletir dados específicos de suas regiões ou temáticas, criando trilhas sonoras únicas que enriquecem a experiência do visitante.</p>
 
           <h3>Formatação para Streaming, Instalações e Obras com Name Rights</h3>
-          <p>O DataSonar Labs se interessa por múltiplas possibilidades de formatação e distribuição de conteúdo. Para plataformas de streaming, desenvolvemos composições contínuas baseadas em dados ambientais em tempo real, criando paisagens sonoras em constante evolução. Em instalações artísticas, o sistema pode ser configurado para responder a dados locais específicos, gerando performances sonoras únicas para cada ambiente. Oferecemos também oportunidades de naming rights para obras personalizadas, onde parceiros podem ter composições exclusivas criadas a partir de dados de suas escolhas, seja para fins comerciais, educacionais ou artísticos, estabelecendo uma conexão única entre marca, natureza e arte sonora.</p>
+          <p>O DataSonar Labs se interessa por múltiplas possibilidades de formatação and distribuição de conteúdo. Para plataformas de streaming, desenvolvemos composições contínuas baseadas em dados ambientais em tempo real, criando paisagens sonoras em constante evolução. Em instalações artísticas, o sistema pode ser configurado para responder a dados locais específicos, gerando performances sonoras únicas para cada ambiente. Oferecemos também oportunidades de naming rights para obras personalizadas, onde parceiros podem ter composições exclusivas criadas a partir de dados de suas escolhas, seja para fins comerciais, educacionais ou artísticos, estabelecendo uma conexão única entre marca, natureza e arte sonora.</p>
+          
+          <!-- Conteúdo adicional para demonstrar o scroll -->
+          <h3>Mais Detalhes sobre Nossas Parcerias</h3>
+          <p>Nossas colaborações são construídas sobre três pilares principais: inovação tecnológica, impacto ambiental e expressão artística. Trabalhamos com parceiros para desenvolver soluções personalizadas que atendam às suas necessidades específicas, seja através de instalações interativas, composições exclusivas ou integrações com sistemas existentes.</p>
+          
+          <p>A tecnologia por trás do DataSonar Labs permite transformar dados brutos - como temperaturas, padrões climáticos, níveis de poluição ou dados de biodiversidade - em paisagens sonoras complexas e emocionalmente ressonantes. Esta abordagem única oferece uma nova forma de engajamento com dados ambientais, transformando estatísticas abstratas em experiências sensoriais memoráveis.</p>
         </section>
       </div>
     </main>
@@ -296,6 +342,17 @@
       <p>&copy; 2025 Cristiano Saramago. Todos os direitos reservados.</p>
     </footer>
 
+    <script>
+      // Efeito parallax para a imagem de fundo
+      document.addEventListener('scroll', function() {
+        const parallaxBg = document.querySelector('.parallax-bg');
+        const scrollPosition = window.pageYOffset;
+        // Ajusta a posição vertical da imagem baseada no scroll
+        parallaxBg.style.transform = `translateY(${scrollPosition * 0.5}px)`;
+      });
+    </script>
+  </body>
+</html>
   </body>
 </html>
 
