@@ -12,13 +12,15 @@
       body {
         height: 100%;
         overflow-x: hidden;
+        margin: 0;
+        padding: 0;
       }
       
       body { 
         font-family: 'Merriweather', serif;
         color: #4a3728;
         min-height: 100vh;
-        padding-top: 80px; /* Espaço para o menu fixo */
+        padding-top: 80px;
         position: relative;
       }
 
@@ -38,13 +40,13 @@
         top: 0;
         left: 0;
         width: 100%;
-        height: 120%; /* Altura extra para o efeito de movimento */
+        height: 150%; /* Altura maior para melhor efeito */
         background-image: url('attached_assets/ChatGPTImage17dejul.de2025,12_38_12.png');
         background-size: cover;
         background-position: center top;
         background-repeat: no-repeat;
-        will-change: transform;
         transform: translateZ(0);
+        will-change: transform; /* Otimização para animação */
       }
 
       /* Menu fixo no topo */
@@ -228,6 +230,14 @@
           margin-top: 1.5rem;
           padding: 1.5rem;
         }
+        
+        h2 {
+          font-size: 2rem;
+        }
+        
+        h3 {
+          font-size: 1.5rem;
+        }
       }
 
       @media (max-width: 480px) {
@@ -296,7 +306,7 @@
   <body>
     <!-- Container parallax para a imagem de fundo -->
     <div class="parallax-container">
-      <div class="parallax-bg"></div>
+      <div class="parallax-bg" id="parallax-bg"></div>
     </div>
     
     <nav>
@@ -321,19 +331,24 @@
           <h2>Experiências e parcerias</h2>
           
           <h3>Parcerias com Empresas Eco-Conscientes</h3>
-          <p>O projeto DataSonar Labs busca estabelecer parcerias estratégicas com empresas comprometidas com a sustentabilidade e responsabilidade ambiental. Através da sonificação de dados ambientais, oferecemos uma nova forma de comunicar e sensibilizar sobre questões ecológicas. Empresas podem integrar nossas composições sonoras em suas campanhas de consciência ambiental, eventos corporativos e materiais educacionais, creato uma experiência imersiva que traduz dados climáticos e ambientais em linguagem musical acessível e impactante.</p>
+          <p>O projeto DataSonar Labs busca estabelecer parcerias estratégicas com empresas comprometidas com a sustentabilidade e responsabilidade ambiental. Através da sonificação de dados ambientais, oferecemos uma nova forma de comunicar e sensibilizar sobre questões ecológicas. Empresas podem integrar nossas composições sonoras em suas campanhas de consciência ambiental, eventos corporativos e materiais educacionais, criando uma experiência imersiva que traduz dados climáticos e ambientais em linguagem musical acessível e impactante.</p>
 
           <h3>Parcerias com Estabelecimentos Temáticos</h3>
           <p>Museus de ciências, centros de educação ambiental, planetários e espaços culturais podem incorporar as obras do DataSonar Labs como parte de suas exposições permanentes ou temporárias. Nossa tecnologia oferece uma abordagem inovadora para apresentar dados científicos, transformando informações complexas sobre clima, biodiversidade e fenômenos naturais em experiências sonoras envolventes. Estabelecimentos temáticos podem personalizar as composições para refletir dados específicos de suas regiões ou temáticas, criando trilhas sonoras únicas que enriquecem a experiência do visitante.</p>
 
           <h3>Formatação para Streaming, Instalações e Obras com Name Rights</h3>
-          <p>O DataSonar Labs se interessa por múltiplas possibilidades de formatação and distribuição de conteúdo. Para plataformas de streaming, desenvolvemos composições contínuas baseadas em dados ambientais em tempo real, criando paisagens sonoras em constante evolução. Em instalações artísticas, o sistema pode ser configurado para responder a dados locais específicos, gerando performances sonoras únicas para cada ambiente. Oferecemos também oportunidades de naming rights para obras personalizadas, onde parceiros podem ter composições exclusivas criadas a partir de dados de suas escolhas, seja para fins comerciais, educacionais ou artísticos, estabelecendo uma conexão única entre marca, natureza e arte sonora.</p>
+          <p>O DataSonar Labs se interessa por múltiplas possibilidades de formatação e distribuição de conteúdo. Para plataformas de streaming, desenvolvemos composições contínuas baseadas em dados ambientais em tempo real, creato paisagens sonoras em constante evolução. Em instalações artísticas, o sistema pode ser configurado para responder a dados locais específicos, gerando performances sonoras únicas para cada ambiente. Oferecemos também oportunidades de naming rights para obras personalizadas, onde parceiros podem ter composições exclusivas criadas a partir de dados de suas escolhas, seja para fins comerciais, educacionais ou artísticos, estabelecendo uma conexão única entre marca, natureza e arte sonora.</p>
           
-          <!-- Conteúdo adicional para demonstrar o scroll -->
+          <!-- Conteúdo adicional para demonstrar melhor o efeito parallax -->
           <h3>Mais Detalhes sobre Nossas Parcerias</h3>
           <p>Nossas colaborações são construídas sobre três pilares principais: inovação tecnológica, impacto ambiental e expressão artística. Trabalhamos com parceiros para desenvolver soluções personalizadas que atendam às suas necessidades específicas, seja através de instalações interativas, composições exclusivas ou integrações com sistemas existentes.</p>
           
           <p>A tecnologia por trás do DataSonar Labs permite transformar dados brutos - como temperaturas, padrões climáticos, níveis de poluição ou dados de biodiversidade - em paisagens sonoras complexas e emocionalmente ressonantes. Esta abordagem única oferece uma nova forma de engajamento com dados ambientais, transformando estatísticas abstratas em experiências sensoriais memoráveis.</p>
+          
+          <h3>Vantagens das Nossas Soluções</h3>
+          <p>As experiências de sonificação de dados oferecem diversas vantagens para empresas e instituições: maior engajamento do público, comunicação eficaz de informações complexas, reforço da imagem institucional como entidade eco-conscious, e criação de experiências memoráveis que diferenciam sua organização no mercado.</p>
+          
+          <p>Além disso, nossas soluções são altamente personalizáveis, podendo ser adaptadas para diferentes contextos e objetivos. Desenvolvemos desde instalações físicas permanentes até experiências digitais para plataformas online, sempre com foco na qualidade artística e na precisão científica da representação dos dados.</p>
         </section>
       </div>
     </main>
@@ -343,16 +358,22 @@
     </footer>
 
     <script>
-      // Efeito parallax para a imagem de fundo
-      document.addEventListener('scroll', function() {
-        const parallaxBg = document.querySelector('.parallax-bg');
-        const scrollPosition = window.pageYOffset;
-        // Ajusta a posição vertical da imagem baseada no scroll
-        parallaxBg.style.transform = `translateY(${scrollPosition * 0.5}px)`;
+      // Efeito parallax melhorado
+      document.addEventListener('DOMContentLoaded', function() {
+        const parallaxBg = document.getElementById('parallax-bg');
+        
+        window.addEventListener('scroll', function() {
+          const scrollPosition = window.pageYOffset;
+          // Ajusta a posição vertical da imagem baseada no scroll
+          // Quanto maior o multiplicador, mais rápido a imagem se move
+          parallaxBg.style.transform = `translateY(${scrollPosition * 0.4}px)`;
+        });
+        
+        // Forçar redesenho para ativar otimizações CSS
+        parallaxBg.style.display = 'none';
+        parallaxBg.offsetHeight; // Forçar reflow
+        parallaxBg.style.display = '';
       });
     </script>
   </body>
 </html>
-  </body>
-</html>
-
