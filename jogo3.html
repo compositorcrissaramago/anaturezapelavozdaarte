@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Grid Sonoro com Imagem</title>
+  <style>
+    body {
+      margin: 0;
+      background: #000;
+      color: #fff;
+      font-family: sans-serif;
+    }
+    canvas {
+      display: block;
+      margin: auto;
+    }
+  </style>
+  <!-- Libs do p5.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/addons/p5.sound.min.js"></script>
+</head>
+<body>
+  <script>
+    let img;
+    let gridSize = 8;
+    let gfx;
+    let currentCell = -1;
+    let lastChange = 0;
+    let interval = 1300;
+    let maxAmp = 0.2;
+    let alfaGrid = 150;
+
+    let speedSlider, gridSlider, ampSlider, alfaSlider;
+    let imgInput;
+    let startButton;
+
+    let started = false;
+    let running = false;
+
+    let oscList = []; // 3 osciladores globais
+    let reverb;
+
+    function preload() {
+      img = loadImage("https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Fronalpstock_big.jpg/640px-Fronalpstock_big.jpg");
+    }
+
+    function setup() {
+      adjustCanvasSize();
+      noStroke();
+      gfx = createGraphics(gridSize, gridSize);
+      gfx.pixelDensity(1);
+
+      createDiv('Mude os parâmetros antes de iniciar:').style('color', '#fff').position(10, 10);
+
+      // sliders
+      speedSlider = createSlider(100, 2000, interval, 50);
+      speedSlider.position(10, 40).style('width', '200px');
+
+      gridSlider = createSlider(2, 25, gridSize, 1);
+      gridSlider.position(10, 70).style('width', '200px');
+
+      ampSlider = createSlider(0, 0.5, maxAmp, 0.01);
+      ampSlider.position(10, 100).style('width', '200px');
+
+      alfaSlider = createSlider(0, 255, alfaGrid, 1);
+      alfaSlider.position(10, 130).style('width', '200px');
+
+      createDiv('Cole a URL da imagem e pressione Enter:').style('color', '#fff').position(10, 160);
+      imgInput = createInput('https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Fronalpstock_big.jpg/640px-Fronalpstock_big.jpg');
+      imgInput.position(10, 190).size(400);
+      imgInput.input(loadNewImage);
+
+      startButton = createButton('Iniciar Grid');
+      startButton.position(10, 220).mousePressed(() => { running = true; });
+
+      // cria os 3 osciladores globais com reverb
+      reverb = new p5.Reverb();
+      for (let i = 0; i < 3; i++) {
+        let osc = new p5.Oscillator('sine');
+        osc.start();
+        osc.amp(0);
+        reverb.process(osc, 2, 1.2);
+        oscList.push(osc);
+      }
+    }
+
+    function adjustCanvasSize() {
+      if (!img) return;
+      let aspectRatio = img.width / img.height;
+      let canvasWidth = windowWidth;
+      let canvasHeight = canvasWidth / aspectRatio;
+      if (canvasHeight > windowHeight) {
+        canvasHeight = windowHeight;
+        canvasWidth = canvasHeight * aspectRatio;
+      }
+      createCanvas(canvasWidth, canvasHeight);
+    }
+
+    function loadNewImage() {
+      let url = imgInput.value();
+      if (url) {
+        loadImage(url, (loadedImg) => {
+          img = loadedImg;
+          adjustCanvasSize();
+        });
+      }
+    }
+
+    // função auxiliar para deslocar índice pela intensidade (verde)
+    function intervalIndex(baseIndex, minInterval, maxInterval, value) {
+      let step = map(value, 0, 255, minInterval, maxInterval);
+      return baseIndex + round(step);
+    }
+
+    function draw() {
+      background(30);
+      if (img) image(img, 0, 0, width, height);
+
+      // sliders
+      interval = map(speedSlider.value(), 100, 2000, 2000, 100);
+      gridSize = constrain(gridSlider.value(), 2, 25);
+      maxAmp = ampSlider.value();
+      alfaGrid = alfaSlider.value();
+
+      gfx.resizeCanvas(gridSize, gridSize);
+      if (img) gfx.image(img, 0, 0, gridSize, gridSize);
+      gfx.loadPixels();
+
+      let cellW = width / gridSize;
+      let cellH = height / gridSize;
+
+      if (running && millis() - lastChange > interval) {
+        currentCell = (currentCell + 1) % (gridSize * gridSize);
+        lastChange = millis();
+      }
+
+      // desenha grid
+      for (let gx = 0; gx < gridSize; gx++) {
+        for (let gy = 0; gy < gridSize; gy++) {
+          let idx = 4 * (gy * gridSize + gx);
+          let r = gfx.pixels[idx];
+          let g = gfx.pixels[idx + 1];
+          let b = gfx.pixels[idx + 2];
+          if (!isFinite(r) || !isFinite(g) || !isFinite(b)) continue;
+
+          let cellIndex = gy * gridSize + gx;
+          if (cellIndex === currentCell && running) {
+            stroke(255);
+            strokeWeight(3);
+          } else {
+            noStroke();
+          }
+          fill(r, g, b, alfaGrid);
+          rect(gx * cellW, gy * cellH, cellW, cellH);
+        }
+      }
+
+      // atualiza som
+      if (started && running && currentCell >= 0) {
+        let gx = currentCell % gridSize;
+        let gy = floor(currentCell / gridSize);
+        let idx = 4 * (gy * gridSize + gx);
+        let r = gfx.pixels[idx];
+        let g = gfx.pixels[idx + 1];
+        let b = gfx.pixels[idx + 2];
+
+        // escala (quase mixolídio) para notas
+        let escala = [174.61, 196.0, 207.65, 233.08, 261.63, 277.18, 311.13, 349.23, 392.0];
+        let octaves = [4, 2, 1];
+
+        let idxB = floor(map(b, 0, 255, 0, escala.length - 1));
+        let idxG = intervalIndex(idxB, 2, 4, g);
+        if (idxG >= escala.length) idxG = escala.length - 1;
+        let idxR = floor(map(r, 0, 255, 0, escala.length - 1));
+
+        // frequências com slide
+        oscList[0].freq(escala[idxR] * octaves[0], 0.25);
+        oscList[1].freq(escala[idxG] * octaves[1], 0.15);
+        oscList[2].freq(escala[idxB] * octaves[2], 0.2);
+
+        // amplitudes
+        oscList[0].amp(maxAmp / 4, 0.3);
+        oscList[1].amp(maxAmp / 3, 0.3);
+        oscList[2].amp(maxAmp / 1.5, 0.3);
+      }
+
+      // mostrar valores
+      noStroke();
+      fill(255);
+      rect(240, 35, 200, 120);
+      fill(0);
+      text("Velocidade (ms): " + int(interval), 250, 55);
+      text("Quantidade de células: " + gridSize, 250, 75);
+      text("Amp Max: " + maxAmp.toFixed(2), 250, 95);
+      text("Alfa Grid: " + alfaGrid, 250, 115);
+    }
+
+    function mousePressed() {
+      let ctx = getAudioContext();
+      if (ctx && ctx.state !== 'running') ctx.resume();
+      started = true;
+    }
+
+    function windowResized() {
+      adjustCanvasSize();
+    }
+  </script>
+</body>
+</html>
