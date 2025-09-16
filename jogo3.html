@@ -41,7 +41,7 @@
     let reverb;
 
     function preload() {
-      img = loadImage("https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Fronalpstock_big.jpg/640px-Fronalpstock_big.jpg");
+      img = loadImage("https://s.ebiografia.com/img/an/oi/a_noite_estrelada.jpg?auto_optimize=low");
     }
 
     function setup() {
@@ -66,7 +66,7 @@
       alfaSlider.position(10, 130).style('width', '200px');
 
       createDiv('Cole a URL da imagem e pressione Enter:').style('color', '#fff').position(10, 160);
-      imgInput = createInput('https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Fronalpstock_big.jpg/640px-Fronalpstock_big.jpg');
+      imgInput = createInput('Cole aqui o link da imagem!');
       imgInput.position(10, 190).size(400);
       imgInput.input(loadNewImage);
 
