@@ -12,14 +12,75 @@
     }
     canvas {
       display: block;
-      margin: auto;
+      margin-left: 220px; /* deixa espaço para o painel */
+    }
+    /* Painel lateral fixo */
+    #controlPanel {
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      width: 200px;
+      background: rgba(50, 50, 50, 0.8);
+      padding: 10px;
+      border-radius: 8px;
+      backdrop-filter: blur(5px);
+    }
+    #controlPanel div {
+      margin-bottom: 15px;
+    }
+    #controlPanel label {
+      display: block;
+      margin-bottom: 4px;
+    }
+    input[type=range] {
+      width: 100%;
+    }
+    input[type=text] {
+      width: 100%;
+    }
+    button {
+      width: 100%;
+      padding: 6px;
+      border-radius: 4px;
+      border: none;
+      background: #444;
+      color: #fff;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #666;
     }
   </style>
-  <!-- Libs do p5.js -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/addons/p5.sound.min.js"></script>
 </head>
 <body>
+  <div id="controlPanel">
+    <div>
+      <label>Velocidade (ms): <span id="speedLabel">1300</span></label>
+      <input type="range" id="speedSlider" min="100" max="2000" value="1300" step="50">
+    </div>
+    <div>
+      <label>Células: <span id="gridLabel">8</span></label>
+      <input type="range" id="gridSlider" min="2" max="25" value="8" step="1">
+    </div>
+    <div>
+      <label>Amp Max: <span id="ampLabel">0.2</span></label>
+      <input type="range" id="ampSlider" min="0" max="0.5" value="0.2" step="0.01">
+    </div>
+    <div>
+      <label>Alfa Grid: <span id="alfaLabel">150</span></label>
+      <input type="range" id="alfaSlider" min="0" max="255" value="150" step="1">
+    </div>
+    <div>
+      <label>URL da Imagem:</label>
+      <input type="text" id="imgInput" value="https://s.ebiografia.com/img/an/oi/a_noite_estrelada.jpg?auto_optimize=low">
+    </div>
+    <div>
+      <button id="startButton">Iniciar Grid</button>
+    </div>
+  </div>
+
   <script>
     let img;
     let gridSize = 8;
@@ -30,15 +91,15 @@
     let maxAmp = 0.2;
     let alfaGrid = 150;
 
-    let speedSlider, gridSlider, ampSlider, alfaSlider;
-    let imgInput;
-    let startButton;
-
     let started = false;
     let running = false;
 
-    let oscList = []; // 3 osciladores globais
+    let oscList = [];
     let reverb;
+
+    // Elementos HTML
+    let speedSlider, gridSlider, ampSlider, alfaSlider, imgInput, startButton;
+    let speedLabel, gridLabel, ampLabel, alfaLabel;
 
     function preload() {
       img = loadImage("https://s.ebiografia.com/img/an/oi/a_noite_estrelada.jpg?auto_optimize=low");
@@ -50,30 +111,22 @@
       gfx = createGraphics(gridSize, gridSize);
       gfx.pixelDensity(1);
 
-      createDiv('Mude os parâmetros antes de iniciar:').style('color', '#fff').position(10, 10);
+      // Conecta elementos HTML
+      speedSlider = select('#speedSlider');
+      gridSlider = select('#gridSlider');
+      ampSlider = select('#ampSlider');
+      alfaSlider = select('#alfaSlider');
+      imgInput = select('#imgInput');
+      startButton = select('#startButton');
 
-      // sliders
-      speedSlider = createSlider(100, 2000, interval, 50);
-      speedSlider.position(10, 40).style('width', '200px');
+      speedLabel = select('#speedLabel');
+      gridLabel = select('#gridLabel');
+      ampLabel = select('#ampLabel');
+      alfaLabel = select('#alfaLabel');
 
-      gridSlider = createSlider(2, 25, gridSize, 1);
-      gridSlider.position(10, 70).style('width', '200px');
-
-      ampSlider = createSlider(0, 0.5, maxAmp, 0.01);
-      ampSlider.position(10, 100).style('width', '200px');
-
-      alfaSlider = createSlider(0, 255, alfaGrid, 1);
-      alfaSlider.position(10, 130).style('width', '200px');
-
-      createDiv('Cole a URL da imagem e pressione Enter:').style('color', '#fff').position(10, 160);
-      imgInput = createInput('Cole aqui o link da imagem!');
-      imgInput.position(10, 190).size(400);
+      startButton.mousePressed(() => { running = true; });
       imgInput.input(loadNewImage);
 
-      startButton = createButton('Iniciar Grid');
-      startButton.position(10, 220).mousePressed(() => { running = true; });
-
-      // cria os 3 osciladores globais com reverb
       reverb = new p5.Reverb();
       for (let i = 0; i < 3; i++) {
         let osc = new p5.Oscillator('sine');
@@ -87,7 +140,7 @@
     function adjustCanvasSize() {
       if (!img) return;
       let aspectRatio = img.width / img.height;
-      let canvasWidth = windowWidth;
+      let canvasWidth = windowWidth - 220; // espaço do painel
       let canvasHeight = canvasWidth / aspectRatio;
       if (canvasHeight > windowHeight) {
         canvasHeight = windowHeight;
@@ -106,7 +159,6 @@
       }
     }
 
-    // função auxiliar para deslocar índice pela intensidade (verde)
     function intervalIndex(baseIndex, minInterval, maxInterval, value) {
       let step = map(value, 0, 255, minInterval, maxInterval);
       return baseIndex + round(step);
@@ -116,11 +168,16 @@
       background(30);
       if (img) image(img, 0, 0, width, height);
 
-      // sliders
       interval = map(speedSlider.value(), 100, 2000, 2000, 100);
       gridSize = constrain(gridSlider.value(), 2, 25);
       maxAmp = ampSlider.value();
       alfaGrid = alfaSlider.value();
+
+      // atualiza labels
+      speedLabel.html(int(interval));
+      gridLabel.html(gridSize);
+      ampLabel.html(maxAmp.toFixed(2));
+      alfaLabel.html(alfaGrid);
 
       gfx.resizeCanvas(gridSize, gridSize);
       if (img) gfx.image(img, 0, 0, gridSize, gridSize);
@@ -134,7 +191,6 @@
         lastChange = millis();
       }
 
-      // desenha grid
       for (let gx = 0; gx < gridSize; gx++) {
         for (let gy = 0; gy < gridSize; gy++) {
           let idx = 4 * (gy * gridSize + gx);
@@ -155,7 +211,6 @@
         }
       }
 
-      // atualiza som
       if (started && running && currentCell >= 0) {
         let gx = currentCell % gridSize;
         let gy = floor(currentCell / gridSize);
@@ -164,7 +219,6 @@
         let g = gfx.pixels[idx + 1];
         let b = gfx.pixels[idx + 2];
 
-        // escala (quase mixolídio) para notas
         let escala = [174.61, 196.0, 207.65, 233.08, 261.63, 277.18, 311.13, 349.23, 392.0];
         let octaves = [4, 2, 1];
 
@@ -173,26 +227,14 @@
         if (idxG >= escala.length) idxG = escala.length - 1;
         let idxR = floor(map(r, 0, 255, 0, escala.length - 1));
 
-        // frequências com slide
         oscList[0].freq(escala[idxR] * octaves[0], 0.25);
         oscList[1].freq(escala[idxG] * octaves[1], 0.15);
         oscList[2].freq(escala[idxB] * octaves[2], 0.2);
 
-        // amplitudes
         oscList[0].amp(maxAmp / 4, 0.3);
         oscList[1].amp(maxAmp / 3, 0.3);
         oscList[2].amp(maxAmp / 1.5, 0.3);
       }
-
-      // mostrar valores
-      noStroke();
-      fill(255);
-      rect(240, 35, 200, 120);
-      fill(0);
-      text("Velocidade (ms): " + int(interval), 250, 55);
-      text("Quantidade de células: " + gridSize, 250, 75);
-      text("Amp Max: " + maxAmp.toFixed(2), 250, 95);
-      text("Alfa Grid: " + alfaGrid, 250, 115);
     }
 
     function mousePressed() {
